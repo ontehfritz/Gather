@@ -1,0 +1,89 @@
+<script type="text/javascript">
+function showNewDialog(){
+	$("#divId").dialog({ title: 'Create Section' });
+   	$("#divId").dialog("open");
+   	$("#modalIframeId").attr("src","/sections/<%= @statistician_id %>/new");
+   	return false;
+}
+function showEditDialog(sectionID){
+	$("#divId").dialog({ title: 'Edit Section' });
+   	$("#divId").dialog("open");
+   	$("#modalIframeId").attr("src","/sections/" + sectionID + "/edit");
+   	return false;
+}
+// Return a helper with preserved width of cells
+var fixHelper = function(e, ui) {
+    ui.children().each(function() {
+        $(this).width($(this).width());
+    });
+    return ui;
+};
+
+$(document).ready(function() {
+	$("#divId").dialog({
+           autoOpen: false,
+           modal: true,
+           height: 500,
+           width: 500,
+           close: function(event, ui){ 
+        		location.reload(true); 
+       	   }
+    });
+
+	$("#sort tbody").sortable({
+    	helper: fixHelper,
+		update: function (event, ui) {
+        	var Order = $("#sort tbody").sortable('toArray').toString();
+           	document.getElementById("sort_order").value = Order;
+		}
+	}).disableSelection();
+
+	var Order = $("#sort tbody").sortable('toArray').toString();
+    document.getElementById("sort_order").value = Order;
+});
+</script>
+<%= form_tag('save_sort') %>
+<%= hidden_field_tag "sort_order"%>
+<h1>Listing sections</h1>
+<hr />
+<p>Create and edit sections(pages). Click a section name to add questions to that section. You can
+	change the order of sections by dragging them to the position desired. Click "save order" to commit.</p>
+<%= link_to_function image_tag("new_survey.png", :border => 0),'return showNewDialog();' %>
+<% if @sections.length > 0%>
+<table id="sort" style="width: 100%;">
+<thead>
+  <tr>
+  	<th></th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Sort index</th>
+    <th>Action</th>
+  </tr>
+</thead>
+<tbody>
+<% @sections.each do |section| %>
+  <tr id="<%= section.id %>">
+  	<td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>
+    <td style="width: 20%"><%= link_to section.name, :controller => "questions", :action => "index", :section_id => section.id %></td>
+    <td><%= section.description %></td>
+    <td><%= section.sort_index %></td>
+    <td style="width:10%"><a href="" onclick="return showEditDialog(<%= section.id%>)"><%= image_tag("edit.png", :border => 0) %></a> 
+    <%= link_to image_tag("delete.png", :border => 0), section, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+<% else%>
+<div style="border: 1px solid">No Section exist. Please click "new section" to create a section</div>
+<% end %>
+<br />
+<div id="divId">
+    <iframe id="modalIframeId" width="100%" height="100%"
+    marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
+    title="Dialog Title">Your browser does not support javascript... that is really messed up!</iframe>
+</div>
+<hr />
+<%= submit_tag "Save Order" %>
+<%= submit_tag "Survey" %>
+</form>
+

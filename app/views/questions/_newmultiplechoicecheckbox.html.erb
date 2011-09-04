@@ -1,0 +1,149 @@
+<script type="text/javascript">
+function showNewDialog(){
+	$("#divId").dialog({ title: 'New Answer' });
+	$("#divId").dialog("open");
+	$("#modalIframeId").attr("src","/elements/<%= @question.id %>/new");
+	return false;
+}
+function showEditDialog(id){
+	$("#divId").dialog({ title: 'Edit Section' });
+	$("#divId").dialog("open");
+	$("#modalIframeId").attr("src","/elements/" + id + "/edit");
+	return false;
+}
+function showAddImage(){
+	$("#divId").dialog({ title: 'Add Image' });
+	$("#divId").dialog("open");
+	$("#modalIframeId").attr("src","/question_images/<%= @question.id %>/new");
+	return false;
+}
+function showEditImage(id){
+	$("#divId").dialog({ title: 'Edit Image' });
+	$("#divId").dialog("open");
+	$("#modalIframeId").attr("src","/question_images/" + id + "/edit");
+	return false;
+}
+
+	// Return a helper with preserved width of cells
+	var fixHelper = function(e, ui) {
+		ui.children().each(function() {
+			$(this).width($(this).width());
+		});
+		return ui;
+	};
+
+	$(document).ready(function() {
+		$("#divId").dialog({
+			autoOpen : false,
+			modal : true,
+			height : 300,
+			width : 500,
+			close : function(event, ui) {
+				location.reload(true);
+			}
+		});
+
+		$("#sort tbody").sortable({
+			helper : fixHelper,
+			update : function(event, ui) {
+				var Order = $("#sort tbody").sortable('toArray').toString();
+				document.getElementById("sort_order").value = Order;
+			}
+		}).disableSelection();
+
+		$("#question_option_id").change(function() {
+			if($("#question_option_id").val() == "3") {
+				$("#additional").show();
+			} else {
+				$("#additional").hide();
+			}
+		});
+		var Order = $("#sort tbody").sortable('toArray').toString();
+		document.getElementById("sort_order").value = Order;
+	});
+
+</script>
+<%= hidden_field_tag "sort_order"%>
+<div class="field" style="float:left;">
+	<%= f.label :question_text %>
+	<br />
+	<%= f.text_area :question_text, :size => "30x10" %>
+</div>
+<div class="field" style="float:left; margin-left:20px">
+	<%= f.label :instructions %>
+	<br />
+	<%= f.text_area :instructions, :size => "30x10" %>
+</div>
+<div class="field" style="float:left; margin-left:20px;">
+	<fieldset>
+		<legend>
+			Question Options
+		</legend>
+		<b>Include Textbox:</b>
+		<br />
+		<%= select("question", "option_id", Option.all.collect {|t| [ t.name, t.id ] }) %>
+		<br />
+		<div id="additional" style="display:none;">
+			<%= f.label :additional_comments %>
+			<br />
+			<%= f.text_field :additional_comments %>
+			<br />
+		</div>
+		<%= f.label :is_answer_required %>
+		<%= f.check_box :is_answer_required %>
+		<br />
+		<br />
+		<%= f.label :short_name %>
+		<br />
+		<%= f.text_field :short_name %>
+		<br />
+	</fieldset>
+</div>
+<% if @question.id != nil %>
+<div class="field" style="float:left; margin-left:20px;">
+	<% if @question_image != nil %>
+		<a href="" onclick="return showEditImage(<%="#{@question_image.id}"%>)">Add/Edit Image</a>
+	<% else %>
+		<a href="" onclick="return showAddImage()">Add/Edit Image</a>
+	<% end %>
+	<div style="border: 1px solid black;text-align: center">
+		<% if @question_image != nil %>
+		<%= image_tag("/question_images/#{@question_image.id}", :alt => "Image", :size =>"100x100") %>
+		<br />
+		<%= link_to image_tag("delete.png", :border => 0),
+		@question_image,
+		:confirm => 'Are you sure?',
+		:method => :delete %>
+
+		<%end%>
+	</div>
+</div>
+<%end%>
+<% if @question.id != nil %>
+<div id="canswers" style="clear:both">
+	<table id="sort" style="width:100%">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Answer</th>
+				<th>Score</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%= render :partial => "elements/element",
+			:collection => @question.elements %>
+		</tbody>
+	</table>
+	<a href="" onclick="return showNewDialog()"><%= image_tag("new_answer.png", :border => 0)%></a>
+	<br />
+	<div id="divId" title="Add Answer">
+		<iframe id="modalIframeId" width="100%" height="100%"
+		marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
+		title="Dialog Title">
+			Your browser does not suppr
+		</iframe>
+	</div>
+</div>
+<hr />
+<% end %>

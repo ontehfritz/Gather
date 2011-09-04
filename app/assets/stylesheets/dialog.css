@@ -1,0 +1,18 @@
+body {
+	background-color: #fff;
+    font-size: .75em;
+    font-family: Verdana, Helvetica, Sans-Serif;
+    margin: 0;
+    padding: 0;
+    color: #696969;
+}
+tr.row
+{
+   background-color:#ffffff; 
+   border-bottom:1px solid #000;
+}
+tr.altrow
+{
+    background-color:#F0F0F0 ; 
+    border-bottom:1px solid #000;
+}

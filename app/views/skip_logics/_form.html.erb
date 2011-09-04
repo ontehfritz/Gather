@@ -1,0 +1,24 @@
+<%= form_for @skip_logic do |f| %>
+  <% if @skip_logic.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@skip_logic.errors.count, "error") %> prohibited this question from being saved:</h2>
+      <ul>
+      <% @skip_logic.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= f.hidden_field :question_id %>
+  <%= select("skip_logic", "types", SkipLogicType.all.collect {|t| [ t.skip_type, t.skip_type ] }) %>
+  section
+  <%= select("skip_logic", "section_id", Section.where("statistician_id = ?", Question.find(@skip_logic.question_id).section.statistician_id).collect {|t| [ t.name, t.id ] }) %>
+  if answered
+  <%= select("skip_logic", "element_id", Element.where("question_id = ?", @skip_logic.question_id).collect {|t| [ t.element_text, t.id ] }) %>
+  <br />
+  <br />
+  <div class="actions" style="clear:both">
+    <%= submit_tag "Save" %>
+	<%= submit_tag "Cancel" %>
+  </div>
+<% end %>

@@ -1,0 +1,121 @@
+<%= link_to image_tag("survey.png", :border => 0), new_statistician_path %>
+<%= link_to image_tag("users.png", :border => 0), "/users/index" %>
+<hr />
+<table style="width:100%" class="alpha_paging">
+<tr>
+    <td>
+        <%= link_to "All", :controller => "workbench", :action => "index", :id => nil %>
+    </td>
+    <td>
+        <%= link_to 'A', :controller => "workbench", :id => 'a' %>
+    </td>
+    <td>
+        <%= link_to 'B', :controller => "workbench", :id => 'b' %>
+    </td>
+    <td>
+        <%= link_to 'C', :controller => "workbench", :id => 'c' %>
+    </td>
+    <td>
+        <%= link_to 'D', :controller => "workbench", :id => 'd' %>
+    </td>
+    <td>
+       <%= link_to 'E', :controller => "workbench", :id => 'e' %>
+    </td>
+    <td>
+        <%= link_to 'F', :controller => "workbench", :id => 'f' %>
+    </td>
+    <td>
+        <%= link_to 'G', :controller => "workbench", :id => 'g' %>
+    </td>
+    <td>
+        <%= link_to 'H', :controller => "workbench", :id => 'h' %>
+    </td>
+    <td>
+        <%= link_to 'I', :controller => "workbench", :id => 'i' %>
+    </td>
+    <td>
+        <%= link_to 'J', :controller => "workbench", :id => 'j' %>
+    </td>
+    <td>
+        <%= link_to 'K', :controller => "workbench", :id => 'k' %>
+    </td>
+    <td>
+        <%= link_to 'L', :controller => "workbench", :id => 'l' %>
+    </td>
+    <td>
+        <%= link_to 'M', :controller => "workbench", :id => 'm' %>
+    </td>
+    <td>
+        <%= link_to 'N', :controller => "workbench", :id => 'n' %>
+    </td>
+    <td>
+        <%= link_to 'O', :controller => "workbench", :id => 'o' %>
+    </td>
+    <td>
+        <%= link_to 'P', :controller => "workbench", :id => 'p' %>
+    </td>
+    <td>
+        <%= link_to 'Q', :controller => "workbench", :id => 'q' %>
+    </td>
+    <td>
+        <%= link_to 'R', :controller => "workbench", :id => 'r' %>
+    </td>
+    <td>
+        <%= link_to 'S', :controller => "workbench", :id => 's' %>
+    </td>
+    <td>
+        <%= link_to 'T', :controller => "workbench", :id => 't' %>
+    </td>
+    <td>
+        <%= link_to 'U', :controller => "workbench", :id => 'u' %>
+    </td>
+        <td>
+        <%= link_to 'V', :controller => "workbench", :id => 'v' %>
+    </td>
+        <td>
+        <%= link_to 'W', :controller => "workbench", :id => 'w' %>
+    </td>
+        <td>
+        <%= link_to 'X', :controller => "workbench", :id => 'x' %>
+    </td>
+        <td>
+        <%= link_to 'Y', :controller => "workbench", :id => 'y' %>
+    </td>
+        <td>
+        <%= link_to 'Z', :controller => "workbench", :id => 'z' %>
+    </td>
+</tr>
+</table>
+<table class="datatable" style="width:100%">
+  <tr>
+    <th>Survey</th>
+    <th>Responses</th>
+    <th>Action</th>
+  </tr>
+ 
+<% @statisticians.each do |statistician| %>
+  <tr class="<%= cycle('row', 'altrow') %>"
+		onmouseover="this.className='althighlight'" 
+    	onmouseout="this.className='row'" >
+    <td>
+		<span style="font-size:medium; color:Green;"><b><%= link_to statistician.name, :controller => "sections", :action => "index", :statistician_id => statistician.id %></b></span><br />
+		<span style="font-size:x-small; font-style:italic;"><b>Created:</b><%= statistician.created_at %></span>
+		<span style="font-size:x-small; font-style:italic;"><b>Modified:</b><%= statistician.updated_at %></span>
+	</td>
+    <td><%= UserCompletedSurvey.count(:conditions => ['statistician_id = ?', statistician.id]) %></td>
+    <td>
+    	<%= link_to image_tag("edit.png", :border => 0, :title => "Edit survey"), edit_statistician_path(statistician) %> 
+    	<%= link_to statistician.power == true ? image_tag("on.png", :border => 0, :title => "Survey is on") : image_tag("off.png", :border => 0, :title => "Survey is off"), :action => "power", :id => statistician.id %>
+    	<%= link_to image_tag("link.png", :border => 0, :title => "Links for survey"), :action => "link", :id => statistician.id %>
+    	<%= link_to image_tag("results.png", :border => 0, :title => "Results"), :action => "results", :id => statistician.id %>
+    	</td>
+  </tr>
+<% end %>
+<tr style="color:White; background-color:#77b108;">
+    <th colspan="4">&nbsp;</th>
+</tr>
+</table>
+<hr />
+
+
+

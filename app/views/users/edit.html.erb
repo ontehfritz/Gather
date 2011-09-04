@@ -1,0 +1,34 @@
+<% if @complete == true %>
+<script type="text/javascript">
+$(parent.document).find('.ui-dialog');
+window.parent.$('#divId').dialog('close');
+</script>
+<% end %>
+<%= form_for(@user) do |f| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation" style="border: 1px solid red;padding:25px;">
+      <span style="color:red;font-size:medium;font-weight:bold">
+      <%= pluralize(@user.errors.count, "issues") %> occured. Please correct the following:
+      </span>
+      <ul style="color:red;">
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <p><%= f.label :email %><br />
+  <%= f.email_field :email %></p>
+
+  <p><%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+  <%= f.password_field :password %></p>
+
+  <p><%= f.label :password_confirmation %><br />
+  <%= f.password_field :password_confirmation %></p>
+
+  <p><%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+  <%= f.password_field :current_password %></p>
+
+  <%= f.submit "Update" %>
+  <%= submit_tag "Cancel" %>
+<% end %>

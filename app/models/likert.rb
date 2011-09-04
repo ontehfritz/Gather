@@ -1,0 +1,2 @@
+class Likert < Question
+end

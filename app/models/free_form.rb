@@ -1,0 +1,2 @@
+class FreeForm < Question
+end

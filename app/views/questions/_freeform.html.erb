@@ -1,0 +1,30 @@
+<%= hidden_field_tag("questions[" + question.id.to_s + "][is_answer_required]", question.is_answer_required.to_s ) %>
+<%= hidden_field_tag("questions[" + question.id.to_s + "][question]", question.id.to_s ) %>
+<%= hidden_field_tag("questions[" + question.id.to_s + "][type]", question.type ) %>
+<% responses = Response.where("question_id = :question_id and subject_id = :subject_id",
+					{:question_id => question.id,:subject_id => session[:subject_id]}).first %>
+<% if question.errors.any? %>
+<span style="color:red">This question requires an answer.</span>
+<%end%>
+<div class="freeform_question" <% if question.errors.any? %> style="color:red" <%end%>>
+<% if question.is_sub == true %>
+- <%= question.question_text.html_safe %>
+<% else %>
+<%= (question.section.question_count_up_to_this_section(question.section.statistician_id) + question.sort_index).to_s %>)<%= question.question_text.html_safe %>
+<% end %>
+</div>
+<% if question.question_image != nil %>
+<div class="freeform_image">
+<%= image_tag("/question_images/#{question.question_image.id}", :alt => "Free Form Image") %>
+</div>
+<% end %>
+<div class="freeform_instructions">
+<%= question.instructions %>
+</div>
+<div class="freeform_answers">
+<%if responses != nil%>
+	<%= text_area_tag("questions[" + question.id.to_s + "][answer]", responses.answer_text, :size =>"50x5") %>
+<% else %>
+	<%= text_area_tag("questions[" + question.id.to_s + "][answer]", nil,:size=>"50x5") %>
+<% end %>
+</div>

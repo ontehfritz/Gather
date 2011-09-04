@@ -1,0 +1,11 @@
+
+<% content_for :survey_title, @statistician.name %>
+	<p>
+	<%= @statistician.intro.html_safe %>
+	</p>
+	<%= form_tag('begin') %>
+	<div>
+	<%= submit_tag("Agree")%>
+	<%= submit_tag("No thanks")%>
+	</div>
+</form>

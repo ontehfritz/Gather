@@ -1,0 +1,13 @@
+<h2><%= @question.question_text %></h2>
+<hr />
+<table>
+	<% @responses.each do |response|%>
+	<tr class="<%= cycle('row', 'altrow') %>" style="width:100%">
+		<td>
+			<span style="font-size: smaller; font-style: italic"><b>created at:</b> <%= response.created_at.to_s %></span><br />
+			<%= response.answer_text%>
+	    </td>
+	</tr>
+	<%end%>
+</table>
+<hr />

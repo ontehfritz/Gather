@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gather</title>
+  <%= javascript_include_tag "application" %>
+  <%= stylesheet_link_tag 'gather.css' %>
+  <%= stylesheet_link_tag 'jquery-ui-1.8.13.custom.css' %>
+  <%= javascript_include_tag 'jquery-ui-1.8.13.custom.min.js' %>
+  <%= csrf_meta_tag %>
+<script type="text/javascript">
+function showLicense(){
+	$("#license").dialog("open");
+	return false;
+}
+$(document).ready(function() {
+	$("#license").dialog({
+           autoOpen: false,
+           modal: true,
+           height: 300,
+           width: 500,
+    });
+    
+    //$('form').submit(function(){
+    //	$('input[type=submit]', this).attr('disabled', 'disabled');
+	//});
+});
+
+
+</script> 
+</head>
+<body>
+<div id="header" style="background-color:#fff; top:-10px; border-bottom: 1px solid #000;height:40px; width:100%;">
+    <div id="title">
+        <a href="/">
+        <span style="font-size:xx-large; font-weight:bolder; font-family:Arial">✍</span>
+        <span style="font-size:x-large;">Gather</span>
+        </a>
+    </div>  
+    <div id="logindisplay" style="color:#000">
+    	<% if user_signed_in? %>
+    		<%= current_user.email%>
+  			<%= link_to('Logout', destroy_user_session_path) %>        
+		<% else %>
+  			<%= link_to('Login', new_user_session_path)  %>  
+		<% end %>
+    </div> 
+</div>
+<div class="page" >
+    <div id="main">
+    	<p class="notice"><%= notice %></p>
+        <p class="alert"><%= alert %></p>
+            <%= yield %>
+    </div>
+</div>
+<div id="footer" style="background:#4a7409;
+   left:0px;
+   bottom:0px;
+   height:50px;
+   width:100%;
+   border-top: 1px solid black;color: White">
+   <a href="https://github.com/ontehfritz/Gather/issues">Feature Request or Submit Bug</a> | <a href="" onclick="return showLicense();">License</a> | <a href="mailto:bigcheese@theshizit.com">Contact</a> | Version 0.2
+   
+<div id="license" title="MIT-LICENSE" style="display: none;">
+<h3>Copyright 2011 http://www.theshizit.com - Fritz (Fredrick) Seitz </h3>
+<p>
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+</p>
+<p>
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+</p>
+<p>
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<script type="text/javascript">
+function showEditDialog(id){
+	$("#divId").dialog({ title: 'Edit User' });
+   	$("#divId").dialog("open");
+   	$("#modalIframeId").attr("src","/users/" + id + "/edit");
+   	return false;
+}
+
+function showNewDialog(){
+	$("#divId").dialog({ title: 'Create User' });
+   	$("#divId").dialog("open");
+   	$("#modalIframeId").attr("src", "<%= new_user_path %>");
+   	return false;
+}
+
+$(document).ready(function() {
+   $("#divId").dialog({
+           autoOpen: false,
+           modal: true,
+           height: 500,
+           width: 500,
+           close: function(event, ui){ 
+        		location.reload(true); 
+       	   }
+    });
+});
+</script>
+<h2>Listing Users</h2>
+<h3>Edit and create users who have access to change and create surveys</h3>
+<hr />
+<%= link_to_function image_tag("user-new.png", :border => 0),'return showNewDialog();' %>
+
+<table id="sort" style="width: 80%;">
+<thead>
+  <tr>
+    <th>Email</th>
+    <th>Sign-ins</th>
+    <th>Last Sign-in</th>
+    <th>Actions</th>
+  </tr>
+</thead>
+<tbody>
+<% @users.each do |user| %>
+  <tr id="<%= user.id %>">
+    <td><%= user.email %></td>
+    <td><%= user.sign_in_count %></td>
+    <td><%= user.last_sign_in_at %></td>
+    <td><a href="" onclick="return showEditDialog(<%= user.id%>)"><%= image_tag("edit.png", :border => 0) %></a> 
+    <%= link_to image_tag("delete.png", :border => 0), user, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+<hr />
+<%= link_to "<< Back", :controller => "workbench", :action => "index", :id => nil %>
+<div id="divId">
+    <iframe id="modalIframeId" width="100%" height="100%"
+    marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
+    title="Dialog Title">Your browser does not support</iframe>
+</div>

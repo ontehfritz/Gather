@@ -1,0 +1,2 @@
+class MultipleChoiceRadio < Question
+end

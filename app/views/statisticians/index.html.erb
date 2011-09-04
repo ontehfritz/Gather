@@ -1,0 +1,27 @@
+<h1>Listing statisticians</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Intro</th>
+    <th>Outro</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @statisticians.each do |statistician| %>
+  <tr>
+    <td><%= statistician.name %></td>
+    <td><%= statistician.intro %></td>
+    <td><%= statistician.outro %></td>
+    <td><%= link_to 'Show', statistician %></td>
+    <td><%= link_to 'Edit', edit_statistician_path(statistician) %></td>
+    <td><%= link_to 'Destroy', statistician, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Statistician', new_statistician_path %>

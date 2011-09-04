@@ -1,0 +1,15 @@
+<tr id="<%= element.id %>">
+  <td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>
+  <td><%= element.element_text %></td>
+  <%if element.question.types == "Likert"%>
+  <td><%if element.score == -1%>Descending<%else%>Ascending<%end%></td>
+  <%elsif element.question.types != "Scale"%>
+  <td><%= element.score %></td>
+  <%end%> 
+  <td><a href="" onclick="return showEditDialog(<%= element.id %>)"><%= image_tag("edit.png", :border => 0) %></a>
+  <%= link_to image_tag("delete.png", :border => 0),
+			   element,
+               :confirm => 'Are you sure?',
+               :method => :delete %>
+  </td>
+</tr>

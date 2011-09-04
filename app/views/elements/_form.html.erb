@@ -1,0 +1,32 @@
+<%= form_for @element do |f| %>
+  <% if @element.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@element.errors.count, "error") %> prohibited this question from being saved:</h2>
+      <ul>
+      <% @element.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <%= f.hidden_field :question_id %>
+  <div class="field">
+	<%if @element.question.types == "Likert"%>Question Text<%else%><%= f.label :element_text, "Answer" %><%end%><br />
+    <%= f.text_field :element_text%>
+  </div>
+  <%if @element.question.types == "Likert"%>
+  Score (Ascending 1,2,3... or Descending 3, 2, 1....)<br />
+  <%= select( "element", "score", { "Ascending" => "0", "Descending" => "-1"}) %>
+  <%elsif @element.question.type != "Scale"%>
+  <div class="field">
+    <%= f.label :score %><br />
+    <%= f.text_field :score, :value => "0"%>
+  </div>
+  <%end%>
+  <br />
+  <br />
+  <div class="actions" style="clear:both">
+    <%= submit_tag "Save" %>
+	<%= submit_tag "Cancel" %>
+  </div>
+<% end %>

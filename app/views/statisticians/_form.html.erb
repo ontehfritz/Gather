@@ -1,0 +1,29 @@
+<%= form_for(@statistician) do |f| %>
+  <% if @statistician.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@statistician.errors.count, "error") %> prohibited this statistician from being saved:</h2>
+      <ul>
+      <% @statistician.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="field">
+    <%= f.label :name, "Survey Name"%><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :intro %><br />
+    <%= f.text_area :intro, :size => "50x10"%>
+  </div>
+  <div class="field">
+    <%= f.label :outro %><br />
+    <%= f.text_area :outro, :size => "50x10"%>
+  </div>
+  <hr />
+  <div class="actions">
+    <%= f.submit "Create", :disable_with => 'Saving...' %>
+    <%= submit_tag "Cancel" %>
+  </div>
+<% end %>

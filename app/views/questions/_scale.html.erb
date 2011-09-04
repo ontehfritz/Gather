@@ -1,0 +1,52 @@
+<%= hidden_field_tag("questions[" + question.id.to_s + "][is_answer_required]", question.is_answer_required.to_s ) %>
+<%= hidden_field_tag("questions[" + question.id.to_s + "][question]", question.id.to_s ) %>
+<%= hidden_field_tag("questions[" + question.id.to_s + "][multiple_answer]", "true")%>
+<%= hidden_field_tag("questions[" + question.id.to_s + "][type]", question.type ) %>
+<% responses = Response.where("question_id = :question_id and subject_id = :subject_id",
+					{:question_id => question.id,:subject_id => session[:subject_id]}) %>
+
+<% if question.errors.any? %>
+<span style="color:red">This question requires an answer.</span>
+<%end%>					
+<div class="scale_question" <% if question.errors.any? %> style="color:red" <%end%>>
+<% if question.is_sub == true %>
+- <%= question.question_text %>
+<% else %>
+<%= (question.section.question_count_up_to_this_section(question.section.statistician_id) + question.sort_index).to_s %>)<%= question.question_text %>
+<% end %>
+</div>
+<% if question.question_image != nil %>
+<div class="freeform_image">
+<%= image_tag("/question_images/#{question.question_image.id}", :alt => "Free Form Image") %>
+</div>
+<% end %>
+<div class="scale_instructions">
+<%= question.instructions %>
+</div>
+<div class="scale_answers">
+<% question.elements.each do |e|%>
+	<% response = responses.select {|r| r.element_id == e.id }.first %>
+	<div class="scale_answer_title"><%= e.element_text %></div>
+	<table>
+	<tr>
+	<% question.rating.times do |i|%>
+		<td>
+		<%= hidden_field_tag("questions[" + question.id.to_s + "][answer_id[" + e.id.to_s + "][id]]", e.id)%>
+		<% if response != nil && response.answer_text == i.to_s%>
+		<%= radio_button_tag("questions[" + question.id.to_s + "][answer_id[" + e.id.to_s + "][answer]]", i, true) %>
+		<%else%>
+		<%= radio_button_tag("questions[" + question.id.to_s + "][answer_id[" + e.id.to_s + "][answer]]", i) %>
+		<%end%>
+		</td>
+	<%end%>
+	</tr>
+    <tr>
+	<% question.rating.times do |i|%>
+		<td>
+		<%= label_tag(question.id.to_s + "_answer_id_" + e.id.to_s, i)%>
+		</td>
+	<%end%>
+	</tr>
+	</table>
+<% end %>
+</div>

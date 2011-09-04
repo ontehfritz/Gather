@@ -1,0 +1,33 @@
+<% if @complete == true %>
+<script type="text/javascript">
+$(parent.document).find('.ui-dialog');
+window.parent.$('#divId').dialog('close');
+</script>
+<% end %>
+<%= form_for(@section) do |f| %>
+  <% if @section.errors.any? %>
+    <div id="error_explanation" style="border: 1px solid red;padding:25px;">
+      <span style="color:red;font-size:medium;font-weight:bold">
+      	<%= pluralize(@section.errors.count, "issue") %> occured. Please correct the following: </span>
+      <ul style="color:red;">
+      <% @section.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+    <br />
+  <% end %>
+  <%= f.hidden_field :statistician_id %>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :description %><br />
+    <%= f.text_area :description, :size => "50x5" %>
+  </div
+  <div class="actions">
+    <%= f.submit %>
+    <%= submit_tag "Cancel" %>
+  </div>
+<% end %>

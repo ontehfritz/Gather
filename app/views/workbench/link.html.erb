@@ -1,0 +1,14 @@
+<h1>Links</h1>
+<hr />
+URL: <%= link_to url_for(:controller => "surveys" ,:action => "begin", :only_path => false, :id => @statistician.id),
+		:controller => "surveys", :action => "begin", :id => @statistician.id %>
+<br />		
+<br />
+Embed Code: <br />
+<%= text_area_tag 'link', 
+	"<a href='#{url_for(:controller => "surveys" ,:action => "begin", :only_path => false, :id => @statistician.id)}'>your text here</a>",
+		:cols => "80", :rows => "5" %>
+<br />
+<br />
+<br />
+<%= link_to "<< Back", :controller => "workbench", :action => "index", :id => nil %>

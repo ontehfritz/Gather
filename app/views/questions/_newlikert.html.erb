@@ -1,0 +1,94 @@
+<script type="text/javascript">
+function showNewDialog(){
+   $("#divId").dialog("open");
+   $("#modalIframeId").attr("src","/elements/<%=@question.id %>/new");
+   return false;
+}
+function showEditDialog(id){
+   $("#divId").dialog("open");
+   $("#modalIframeId").attr("src","/elements/" + id + "/edit");
+   return false;
+}
+
+
+// Return a helper with preserved width of cells
+var fixHelper = function(e, ui) {
+    ui.children().each(function() {
+        $(this).width($(this).width());
+    });
+    return ui;
+};
+
+$(document).ready(function() {
+   $("#divId").dialog({
+           autoOpen: false,
+           modal: true,
+           height: 300,
+           width: 500,
+           close: function(event, ui){ 
+        		location.reload(true); 
+       	   }
+    });
+
+	$("#sort tbody").sortable({
+    	helper: fixHelper,
+		update: function (event, ui) {
+        	var Order = $("#sort tbody").sortable('toArray').toString();
+           	document.getElementById("sort_order").value = Order;
+		}
+	}).disableSelection();
+
+	var Order = $("#sort tbody").sortable('toArray').toString();
+    document.getElementById("sort_order").value = Order;
+});
+</script>
+<%= hidden_field_tag "sort_order"%>
+<div class="field" style="float:left;">
+	Description<br />
+    <%= f.text_area :question_text, :size => "30x10" %>
+</div>
+<div class="field" style="float:left; margin-left:20px">
+    <%= f.label :instructions %><br />
+    <%= f.text_area :instructions, :size => "30x10" %>
+</div>
+<div class="field" style="float:left; margin-left:20px;">
+	<fieldset>
+	<legend>Question Options</legend>
+	<%= f.label :is_answer_required %>
+	<%= f.check_box :is_answer_required %><br /><br />
+
+    <%= f.label :short_name %><br />
+    <%= f.text_field :short_name %><br />
+	</fieldset>
+</div>
+<div class="field" style="clear:both">
+  Columns (comma seperated):<br />
+  <%= f.text_area :matrix_columns,:cols => "100",:rows => "2",
+					:value => "Strongly disagree,Disagree,Neither agree nor disagree,Agree,Strongly agree" %>
+</div>
+<% if @question.id != nil %>
+<div id="canswers" style="clear:both">
+<table id="sort" style="width:550px">
+<thead>
+<tr>
+	<th></th>
+	<th>Questions</th>
+	<th>Score</th>
+	<th>Action</th>
+</tr>
+</thead>
+<tbody>
+	<%= render :partial => "elements/element",
+           :collection => @question.elements,:locals=>{:f=>f} %>
+</tbody>
+</table>
+<a href="" onclick="return showNewDialog()"><%= image_tag("new_answer.png", :border => 0)%></a>
+<br />
+<div id="divId" title="Add Question">
+    <iframe id="modalIframeId" width="100%" height="100%"
+    marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
+    title="Dialog Title">Your browser does not suppr</iframe>
+</div>
+</div>
+<hr />
+<% end %>

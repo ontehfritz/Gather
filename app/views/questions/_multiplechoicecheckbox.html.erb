@@ -1,0 +1,59 @@
+<%= hidden_field_tag("questions[" + question.id.to_s + "][question]", question.id.to_s ) %>
+<%= hidden_field_tag("questions[" + question.id.to_s + "][is_answer_required]", question.is_answer_required.to_s ) %>
+<%= hidden_field_tag("questions[" + question.id.to_s + "][multiple_answer]", "true")%>
+<%= hidden_field_tag("questions[" + question.id.to_s + "][type]", question.type ) %>
+<% responses = Response.where("question_id = :question_id and subject_id = :subject_id",
+					{:question_id => question.id,:subject_id => session[:subject_id]}) %>
+<% if question.errors.any? %>
+<span style="color:red">This question requires an answer.</span>
+<%end%>
+<div class="multiplechoicecheckbox_question" <% if question.errors.any? %> style="color:red" <%end%>>
+<% if question.is_sub == true %>
+- <%= question.question_text %>
+<% else %>
+<%= (question.section.question_count_up_to_this_section(question.section.statistician_id) + question.sort_index).to_s %>)<%= question.question_text %>
+<% end %>
+</div>
+<% if question.question_image != nil %>
+<div class="multiplechoicecheckbox_image">
+<%= image_tag("/question_images/#{question.question_image.id}", :alt => "Free Form Image") %>
+</div>
+<% end %>
+<div class="multiplechoicecheckbox_instructions">
+<%= question.instructions %>
+</div>
+<div class="multiplechoicecheckbox_answers">
+<ul>
+<% question.elements.each_with_index do |e, i|%>
+	<% response = responses.select {|r| r.element_id == e.id }.first %>
+	<li>
+	<% if response != nil %>
+	<%= check_box_tag("questions[" + question.id.to_s + "][answer_id[" + e.id.to_s + "][id]]", e.id, true) %>
+	<% else %>
+	<%= check_box_tag("questions[" + question.id.to_s + "][answer_id[" + e.id.to_s + "][id]]", e.id) %>
+	<% end %>
+	<%= label_tag(question.id.to_s + "_answer_id_" + e.id.to_s, e.element_text)%>
+	<%if i == question.elements.count - 1 && question.option_id == 2%>
+		<% response = responses.select {|r| r.answer_text != nil }.first %>
+		<%if response != nil%>
+			<%= text_field_tag("questions[" + question.id.to_s + "][answer_id[" + e.id.to_s + "][answer]]",response.answer_text)%>
+		<%else%>
+			<%= text_field_tag("questions[" + question.id.to_s + "][answer_id[" + e.id.to_s + "][answer]]")%>
+		<% end %>
+	<% end%>
+    </li>
+<% end %>
+<li>
+		<%if question.option_id == 3%>
+			<%= label_tag("questions[" + question.id.to_s + "][answer_text]", question.additional_comments)%>
+			<br />
+			<% response = responses.select {|r| r.answer_text != nil }.first %>
+			<%if response != nil%>
+				<%= text_field_tag("questions[" + question.id.to_s + "][answer]",response.answer_text)%>
+			<%else%>
+				<%= text_field_tag("questions[" + question.id.to_s + "][answer]")%>
+			<% end %>
+		<% end%>
+	</li>
+</ul>
+</div>

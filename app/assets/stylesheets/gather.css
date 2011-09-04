@@ -1,0 +1,533 @@
+﻿.button {
+  padding: 4px;
+  font-size: 1.0em;
+}
+
+.buttonSubmit {
+  color: white;
+  background-color: #83b819;
+  border: 1px solid #000;
+}
+
+.buttonSubmitRoll {
+  color: white;
+  background-color: #cc0;
+  border: 1px solid #000;
+
+}
+
+body
+{
+    background-color: #fff;
+    background-image:url('/assets/background.png');
+    background-repeat:repeat-x;
+    font-size: .75em;
+    font-family: Verdana, Helvetica, Sans-Serif;
+    margin: 0;
+    padding: 0;
+    color: #696969;
+}
+
+a:link
+{
+    color:Green;
+    text-decoration: none;
+}
+a:visited
+{
+    color:Green;
+    text-decoration: none;
+}
+a:hover
+{
+    color:Red;
+}
+a:active
+{
+    color:Green;
+    text-decoration: none;
+}
+
+p, ul
+{
+    margin-bottom: 20px;
+    line-height: 1.6em;
+}
+
+/* HEADINGS   
+----------------------------------------------------------*/
+h1, h2, h3, h4, h5, h6
+{
+    font-size: 1.5em;
+    color: #000;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1
+{
+    font-size: 2em;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+h2
+{
+    padding: 0 0 5px 0;
+}
+h3
+{
+    font-size: 1.2em;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+h4
+{
+    font-size: 1.1em;
+}
+h5, h6
+{
+    font-size: 1em;
+}
+
+/* this rule styles <h2> tags that are the 
+first child of the left and right table columns */
+.rightColumn > h1, .rightColumn > h2, .leftColumn > h1, .leftColumn > h2
+{
+    margin-top: 0;
+}
+
+/* PRIMARY LAYOUT ELEMENTS   
+----------------------------------------------------------*/
+
+/* you can specify a greater or lesser percentage for the 
+page width. Or, you can specify an exact pixel width. */
+.page
+{
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#header
+{
+    position: relative;
+    margin-bottom: 0px;
+    color: #000;
+    padding: 0;
+}
+
+#header h1
+{
+    font-weight: bold;
+    padding: 5px 0;
+    margin: 0;
+    color: #000;
+    border: none;
+    line-height: 2em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 32px !important;
+}
+
+#main
+{
+    padding: 10px 30px 15px 30px;
+    border: 1px solid black;
+    height: 80%;
+    background-color: #fff;
+    margin-bottom: 30px;
+    _height: 1px; /* only IE6 applies CSS properties starting with an underscore */
+}
+
+#footer
+{
+    color: #999;
+    padding: 10px 0;
+    text-align: center;
+    line-height: normal;
+    margin: 0;
+    font-size: .9em;
+}
+
+#footer a:link
+{
+	color: #FFFFFF
+}
+
+#footer a:visited
+{
+	color: #FFFFFF
+}
+
+/* FORM LAYOUT ELEMENTS   
+----------------------------------------------------------*/
+
+fieldset 
+{
+    margin: 1em 0;
+    padding: 1em;
+    border: 1px solid #CCC;
+}
+
+fieldset p 
+{
+    margin: 2px 12px 10px 10px;
+}
+
+legend 
+{
+    font-size: 1.1em;
+    font-weight: 600;
+    padding: 2px 4px 8px 4px;
+}
+
+input[type="text"] 
+{
+    width: 200px;
+    border: 1px solid #CCC;
+}
+
+input[type="password"] 
+{
+    width: 200px;
+    border: 1px solid #CCC;
+}
+
+/* TABLE
+----------------------------------------------------------*/
+
+table 
+{
+  border: solid 0px #ffffff;
+  border-collapse: collapse;
+}
+
+table td 
+{
+  padding: 5px;   
+  border: solid 0px #ffffff;
+}
+
+table th
+{
+  padding: 6px 5px;
+  text-align: left;
+  background-color: #5c5e59; 
+  color:White;
+  border: solid 0px #ffffff;   
+}
+
+/* MISC  
+----------------------------------------------------------*/
+.clear
+{
+    clear: both;
+}
+
+.error
+{
+    color:Red;
+}
+#menucontainer
+{
+    margin-top:40px;
+}
+
+div#title
+{
+    display:block;
+    float:left;
+    text-align:left;
+}
+
+#logindisplay
+{
+    font-size:1.1em;
+    display:block;
+    text-align:right;
+    margin:10px;
+    color:Black;
+}
+
+#logindisplay a:link
+{
+    color:Black;
+    text-decoration: underline;
+}
+
+#logindisplay a:visited
+{
+    color:Black;
+    text-decoration: underline;
+}
+
+#logindisplay a:hover
+{
+    color:Black;
+    text-decoration: none;
+}
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error
+{
+    color: #ff0000;
+}
+
+.field-validation-valid
+{
+    display: none;
+}
+
+.input-validation-error
+{
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+}
+
+.validation-summary-errors
+{
+    font-weight: bold;
+    color: #ff0000;
+}
+
+.validation-summary-valid
+{
+    display: none;
+}
+
+/* Styles for collector response summary */
+
+.QuestionResponse
+{
+     background-color:#E6E6E6;
+     font-weight:bold;
+}
+.AnswerResponse
+{
+    background-color:#F2F2F2;
+}
+
+/* Styles for misc
+-------------------------------------------*/
+#questionsort { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+#questionsort li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.0em; height:auto; }
+#questionsort li span { position: absolute; margin-left: -1.3em; } 
+
+a.edit
+{
+    background: url(/Content/edit_small.png) no-repeat top left;
+}
+
+/*Style for MultipleChoiceRadio
+---------------------------------------------------*/
+.multiplechoiceradio_question
+{
+    font-weight:bold;
+}
+.multiplechoiceradio_instructions
+{
+   font-style:italic;
+}
+.multiplechoiceradio_answers ul
+{
+    list-style-type: none;
+}
+.multiplechoiceradio_answers
+{
+     display:none;
+}
+/*Style for MultiplehoiceCheckbox
+-------------------------------------------------*/
+.multiplechoicecheckbox_question
+{
+    font-weight:bold;
+}
+.multiplechoicecheckbox_instructions
+{
+   font-style:italic;
+}
+.multiplechoicecheckbox_answers ul
+{
+    list-style-type: none;
+}
+.multiplechoicecheckbox_answers
+{
+     display:none;
+}
+/*Style for FreeForm 
+-------------------------------------------------*/
+.freeform_question
+{
+    font-weight:bold;
+}
+.freeform_instructions
+{
+   font-style:italic;
+}
+.freeform_answers input[type="text"]
+{
+    width: 200px;
+    border: 1px solid #CCC;
+}
+.freeform_answers
+{
+     display:none;
+}
+
+/*Style for Likert 
+-------------------------------------------------*/
+.likert_question
+{
+    font-weight:bold;
+}
+.likert_instructions
+{
+   font-style:italic;
+}
+.likert_answers
+{
+    /*width: 200px;
+    border: 1px solid #CCC;*/
+    display:none;
+}
+
+.likert_answers table 
+{
+  border: solid 0px #ffffff;
+  border-collapse: collapse;
+}
+
+.likert_answers table td 
+{
+  padding: 5px;   
+  border: solid 0px #ffffff;
+  text-align:center;
+}
+
+.likert_answers table th
+{
+  padding: 6px 5px;
+  text-align: left;
+  background-color: #5c5e59; 
+  color: White;
+  border: solid 2px #ffffff;   
+}
+
+/*Style for Scale
+-------------------------------------------------*/
+.scale_question
+{
+    font-weight:bold;
+}
+.scale_instructions
+{
+   font-style:italic;
+}
+.scale_answers
+{
+    /*width: 200px;
+    border: 1px solid #CCC;*/
+    display:none;
+}
+
+.scale_answers table 
+{
+  border: solid 0px #ffffff;
+  border-collapse: collapse;
+}
+
+.scale_answers table td 
+{
+  padding: 5px;   
+  border: solid 0px #ffffff;
+  text-align:center;
+}
+
+.scale_answers table th
+{
+  padding: 6px 5px;
+  text-align: center;
+  background-color: #5c5e59; 
+  color: White;
+  border: solid 2px #ffffff;   
+}
+.scale_answer_title
+{
+  font-weight:bold;
+  background-color:#E8E8E8;   
+}
+
+/* Style for Alpha Paging
+---------------------------------------*/
+.alpha_paging
+{
+    font-weight:bold;
+    font-size:medium;
+}
+
+/*Style for Tables
+---------------------------------------*/
+.datatable tr.row
+{
+   background-color:#ffffff; 
+   border-bottom:1px solid #000;
+}
+.datatable tr.altrow
+{
+    background-color:#ffffff; 
+    border-bottom:1px solid #000;
+}
+
+.datatable tr.highlight 
+{ 
+    background-color: #e6fdba;
+}
+
+.datatable tr.althighlight
+{
+    background-color:#e6fdba; 
+    border-bottom:1px solid #000;
+}
+
+div.field, div.actions {
+  margin-bottom: 10px;
+}
+
+#notice {
+  color: green;
+}
+
+.field_with_errors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#error_explanation {
+  width: 450px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 0;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#error_explanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  margin-bottom: 0px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#error_explanation ul li {
+  font-size: 12px;
+  list-style: square;
+}
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+}

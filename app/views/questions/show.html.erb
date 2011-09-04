@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Question text:</b>
+  <%= @question.question_text %>
+</p>
+
+<p>
+  <b>Instructions:</b>
+  <%= @question.instructions %>
+</p>
+
+<p>
+  <b>Sort index:</b>
+  <%= @question.sort_index %>
+</p>
+
+<p>
+  <b>Short name:</b>
+  <%= @question.short_name %>
+</p>
+
+<p>
+  <b>Additional comments:</b>
+  <%= @question.additional_comments %>
+</p>
+
+<p>
+  <b>Matrix columns:</b>
+  <%= @question.matrix_columns %>
+</p>
+
+<p>
+  <b>Rating:</b>
+  <%= @question.rating %>
+</p>
+
+
+<%= link_to 'Edit', edit_question_path(@question) %> |
+<%= link_to 'Back', questions_path %>

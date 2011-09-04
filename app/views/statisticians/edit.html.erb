@@ -1,0 +1,110 @@
+<script type="text/javascript">
+function showPwdDialog(){
+   $("#divId").dialog("open");
+   $("#modalIframeId").attr("src","/statisticians/<%= @statistician.id %>/password");
+   return false;
+}
+
+$(document).ready(function() {
+   $("#divId").dialog({
+           autoOpen: false,
+           modal: true,
+           height: 300,
+           width: 500,
+           close: function(event, ui){ 
+        		location.reload(true); 
+       	   }
+    });
+});
+</script>
+
+<h1>Edit Survey</h1>
+<hr />
+<%= form_for(@statistician) do |f| %>
+  <% if @statistician.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@statistician.errors.count, "error") %> prohibited this statistician from being saved:</h2>
+      <ul>
+      <% @statistician.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div style="float:left">
+	  <div class="field">
+	    <%= f.label :name, "Survey Name:"%><br />
+	    <%= f.text_field :name %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :intro,"Message to display at beginning of survey:" %><br />
+	    <%= f.text_area :intro, :size => "50x10"%>
+	  </div>
+	  <div class="field">
+	    <%= f.label :outro,"Message to display upon completion:"  %><br />
+	    <%= f.text_area :outro, :size => "50x10"%>
+	  </div>
+  </div>
+  <div style="float:left; padding-left:20px;">
+   		<fieldset style="margin-top:0px; padding-top:0px;background-color:#e6fdba; height:410px;">
+	    	<legend>Options</legend>
+			<table>
+			<tr>
+				<th colspan="2">Access</th>
+			</tr>
+			<tr>
+	            <td><%= f.label :authentication_mode, "Not Anonymous", :value => "notanonymous" %></td>
+				<td><%= f.radio_button :authentication_mode, "notanonymous"%></td>
+            </tr>
+			<tr>
+		        <td><%= f.label :authentication_mode, "Anonymous", :value => "anonymous" %></td>
+				<td><%= f.radio_button :authentication_mode, "anonymous"%></td>
+			</tr>
+			<!-- ><tr>
+				<td><%= f.label :authentication_mode, "Subject access only", :value => "accesscode" %></td>
+				<td><%= f.radio_button :authentication_mode, "accesscode"%></td>
+			</tr> -->
+            <!-- <tr>
+				<th colspan="2">Other</th>
+			</tr>
+            <tr>
+		    	<td><%= f.label :multi_session, "Allow multiple sessions"%></td>
+				<td><%= f.check_box :multi_session %></td>
+			</tr> -->
+			<tr>
+				<th colspan="2">Actions</th>
+			</tr>
+			<tr>
+		    	<td colspan="2">
+		    		<%= image_tag("edit_sections.png", :border => 0)%>
+		    		<%= link_to "Sections", :controller => "sections", :action => "index", :statistician_id => @statistician.id %>
+		    	</td>
+			</tr>
+			
+			<tr>
+		    	<td colspan="2">
+		    		<%= image_tag("survey_pass_enabled.png", :border => 0)%>
+		    		<a href="" onclick="return showPwdDialog()">Password <% if @statistician.is_password_required == true %>  - enabled <% else %> - disabled <%end%></a>
+		    	</td>
+			</tr>
+			<tr>
+		    	<td colspan="2">
+		    		<%= image_tag("delete_survey.png", :border => 0)%>
+		    		<%= link_to "Delete", @statistician, :confirm => 'Are you sure?', :method => :delete %>
+		        </td>
+			</tr>
+            </table>
+    	</fieldset>
+  </div>
+  <div class="actions" style="clear:both">
+  	<hr />
+    <%= f.submit "Save"%>
+    <%= submit_tag "Cancel" %>
+  </div>
+<% end %>
+<div id="divId" title="Password Management">
+    <iframe id="modalIframeId" width="100%" height="100%"
+    marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
+    title="Dialog Title">Your browser does not support</iframe>
+</div>

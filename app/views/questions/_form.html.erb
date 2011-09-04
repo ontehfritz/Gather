@@ -1,0 +1,37 @@
+<%= form_for(@question.becomes(Question)) do |f| %>
+<%= @question.types = @question_type %> 
+<div id="debug" style="display:none">
+<%= @question.is_sub.to_s %>
+<%= request.path %>
+</div>
+  <% if @question.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
+      <ul>
+      <% @question.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <hr />
+  <%= f.hidden_field :section_id %>
+  <%= f.hidden_field :is_sub %>
+  <div>
+	Select a question type:<br />
+  	<%= select("question", "types", QuestionType.all.collect {|t| [ t.type_name, t.type_name ] }) %>
+  </div>
+  <%if @parent_question != nil%>
+	  <%= hidden_field_tag("parent_question_id", @parent_question.id) %>
+	  <div>
+		Show sub question if answered:<br />
+	 	<%= select_tag "trigger_answer", options_from_collection_for_select(@parent_question.elements,"id", "element_text",@trigger_answer == nil ? "" : @trigger_answer.element_id.to_s ), {:include_blank => true}  %>
+	  </div>
+  <% end %>
+  <%= render :partial => "new" + @question.types.downcase, :locals=>{:f=>f} %>
+  
+  <div class="actions" style="clear:both">
+    <%= submit_tag "Save" %>
+	<%= submit_tag @question.id != nil ? "Done" : "Cancel"  %>
+  </div>
+<% end %>

@@ -1,0 +1,17 @@
+<% content_for :survey_title, @statistician.name %>
+<% if @error == true %>
+<div id="validation_errors" style="color:red;font-size: medium;font-weight: bold">
+	Password is incorrect. Please try agian.
+</div>
+<br /><br />
+<%end%>
+
+<%= form_tag('authenticate') %>
+This survey requires a password: <br />
+<%= password_field_tag 'pass' %>
+<br /><br />
+<div class="actions">
+   	<%= submit_tag "Continue" %>
+	<%= submit_tag "Cancel" %>
+</div>
+</form>

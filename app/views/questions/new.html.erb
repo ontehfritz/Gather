@@ -1,0 +1,10 @@
+<script type = "text/javascript">
+$(document).ready(function () {
+    $("#question_types").change(function () {
+        this.form.submit();
+    });
+});
+</script>
+<h2>Create a New Question</h2>
+<%= render 'form' %>
+

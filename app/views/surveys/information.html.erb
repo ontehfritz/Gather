@@ -1,0 +1,38 @@
+<% content_for :survey_title, @statistician.name %>
+<%= form_tag('information') %>
+  <h1>This survey requires the following information:</h1>
+  <%= hidden_field_tag("subject[identifier]", (0...10).map{ ('a'..'z').to_a[rand(26)] }.join) %>
+  <hr />
+  <% if @new_subject.errors.any? %>
+    <div id="error_explanation" style="border: 1px solid red;padding:25px;">
+      <span style="color:red;font-size:large;font-weight:bold">Please correct the following:</span>
+      <ul style="color:red;">
+      <% @new_subject.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+    <hr />
+  <% end %>
+  <div class="field">
+  	First Name: <br />
+  	<%= text_field_tag("subject[first_name]", @new_subject.first_name) %>
+  </div>
+  <div class="field">
+  	Middle Name: <br />
+    <%= text_field_tag("subject[middle_name]", @new_subject.middle_name) %>
+  </div>
+  <div class="field">
+  	Last Name: <br />
+    <%= text_field_tag("subject[last_name]", @new_subject.last_name) %>
+  </div>
+  <div class="field">
+  	Email: <br />
+    <%= text_field_tag("subject[email]", @new_subject.email) %>
+  </div>
+  <hr />
+  <div class="actions">
+   	<%= submit_tag "Continue" %>
+	<%= submit_tag "Cancel" %>
+  </div>
+</form>

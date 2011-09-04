@@ -1,0 +1,112 @@
+<script type="text/javascript">
+function showNewDialog(){
+   $("#divId").dialog("open");
+   $("#modalIframeId").attr("src","/questions/<%= @section.id %>/new/FreeForm");
+   return false;
+}
+$(document).ready(function () {
+	$("#divId").dialog({
+           autoOpen: false,
+           modal: true,
+           height: 600,
+           width: 900,
+           close: function(event, ui){ 
+        		location.reload(true); 
+       	   }
+    });
+    
+    $("#questionsort").sortable({
+        update: function (event, ui) {
+            var Order = $("#questionsort").sortable('toArray').toString();
+            document.getElementById("sort_order").value = Order;
+        }
+    });
+    $("#questionsort").disableSelection();
+    document.getElementById("sort_order").value = $("#questionsort").sortable('toArray').toString();
+    
+    $("#expand").click(function(){
+        $('.answers').toggle();
+        $('.scale_answers').toggle();
+        $('.likert_answers').toggle();
+        $('.freeform_answers').toggle();
+        $('.multiplechoicecheckbox_answers').toggle();
+        $('.multiplechoiceradio_answers').toggle();
+               
+        if($("#expand").val() == 'Expand'){
+            $("#expand").val('Collapse');
+        }
+        else{
+            $("#expand").val('Expand');
+        }
+    });
+
+    <% @questions.each do |b| %>
+        <% if b.has_sub_question == true %>
+            $("#sub<%= b.id %>").sortable({
+            	update: function (event, ui) {
+                	var Order = $("#sub<%= b.id %>").sortable('toArray').toString();
+                    document.getElementById("sort_order_sub<%= b.id %>").value = Order;
+                }
+            });
+            $("#sub<%= b.id %>").disableSelection();
+            $("#sub<%= b.id %>").mouseenter(function () { $("#questionsort").sortable("option", "disabled", true); });
+            $("#sub<%= b.id %>").mouseleave(function () { $("#questionsort").sortable("option", "disabled", false); });
+            document.getElementById("sort_order_sub<%= b.id %>").value = $("#sub<%= b.id %>").sortable('toArray').toString();
+        <%end%>
+   <%end%>
+});
+</script>
+<%= form_tag('save_sort') %>
+<%= hidden_field_tag "sort_order"%>
+<%= hidden_field_tag "section_id",  @section.id%>
+
+<%= submit_tag "Save Order" %>
+
+<input type="button" value="Expand" 
+id="expand" name="expand"/>
+
+<%= submit_tag "Add Question" %>
+<%= submit_tag "Done" %>
+<hr />
+<h2><%= @section.name %></h2>
+<h3><%= @section.description %></h3>
+<hr />
+<ul id="questionsort">
+<% @questions.each do |q| %>
+  <% if q.is_sub == false %>
+  <li id=<%= q.id %>>
+  
+  <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+		<%= render :partial => "questions/" + q.types.downcase, :locals=>{:question=>q} %> 
+		<%= link_to image_tag("edit_small.png", :border => 0), :action => "edit", :question_id => q.id %>
+		<% if q.types == "MultipleChoiceRadio"%>
+			<%= link_to image_tag("sub_small.png", :border => 0), :action => "new", :id => q.id, :types => "FreeForm",:sub => "new" %>
+		<% end %>
+		<a href="" onclick="return"><%= image_tag("delete_small.png", :border => 0)%></a>
+		<% subs = q.sub_questions %>
+	    <% sub_questions = Question.find(:all, :conditions => ["id IN (?)", subs.map {|s| s.question_sub_id}]).sort_by{|question| question.sort_index} %>
+		<% if sub_questions != nil %>
+			<%= hidden_field_tag "sort_order_sub" + q.id.to_s %>
+			<ul id="sub<%= q.id %>" style=" list-style-type:none;" >	
+			<% sub_questions.each do |s|%>
+				<li id=<%= s.id %>>
+				<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+				<div id="branch_<%= s.id %>" <%if s.is_hidden == true%> style="display:block" <% end %> class="branch" >
+					<%= render :partial => "questions/" + s.types.downcase, :locals=>{:question=>s} %> 
+				</div>
+				<%= link_to image_tag("edit_small.png", :border => 0), :action => "edit", :question_id => s.id %>
+				<a href="" onclick="return"><%= image_tag("delete_small.png", :border => 0)%></a>
+				</li>
+			<% end %>
+			</ul>
+		<% end %>
+	</li>
+	<% end %>
+<% end %>
+</ul>
+<div id="divId" title="New Section">
+    <iframe id="modalIframeId" width="100%" height="100%"
+    marginWidth="0" marginHeight="0" frameBorder="0" scrolling="no"
+    title="Dialog Title">Your browser does not support javascript</iframe>
+</div>
+</form>

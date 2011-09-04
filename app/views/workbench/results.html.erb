@@ -1,0 +1,59 @@
+<script type="text/javascript">
+function showResponsesDialog(question_id){
+	$("#divId").dialog({ title: 'Viewing Responses' });
+   	$("#divId").dialog("open");
+   	$("#modalIframeId").attr("src","/workbench/" + question_id + "/question_responses");
+   	return false;
+}
+$(document).ready(function() {
+	$("#divId").dialog({
+           autoOpen: false,
+           modal: true,
+           height: 500,
+           width: 500,
+           close: function(event, ui){ 
+        		location.reload(true); 
+       	   }
+    });
+});
+</script>
+<h2><%= @statistician.name %></h2>
+Created Date: <b><%= @statistician.created_at.to_s %></b><br />
+<hr />
+<% @questions.each do |result| %>
+<div class="QuestionResponse"><%= result.question_text.html_safe %> </div>
+<table class="AnswerResponses"> 
+		<%result.elements.each do |e|%>
+		<tr>
+			<td class="AnswerResponse"><%= e.element_text %></td>
+			<% if result.type.downcase == "scale" or result.type.downcase == "likert" then %>
+				<% list = e.responses.map{ |x| x.answer_text }%>
+				<% x = list.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h } %> 
+				<% if result.type.downcase == "likert" then %>
+					<% columns = result.matrix_columns.split(",") %>
+					<td class="ResponseCount">Most answered: <%= columns[list.sort_by { |v| x[v] }.last.to_i]%></td>
+			    <% else %>
+	            	<td class="ResponseCount">Most answered: <%= list.sort_by { |v| x[v] }.last%></td>
+	            <% end %>
+            <%else%>
+				<td class="ResponseCount"><%= e.responses.length %></td>
+				<td class="ResponsePercentage"><%= number_to_percentage(e.responses.length.to_f / result.responses.length.to_f * 100) %></td>
+            <%end%>
+            <td></td>
+		</tr>
+		<%end%>
+	<tr>
+		<td class="AnswerResponse"><b>Total</b></td>
+		<td class="ResponseCount"><%= result.responses.length %></td>
+		<td><% if result.type.downcase == "freeform" %><%= link_to_function "View responses","return showResponsesDialog(" + result.id.to_s + ");" %><%end%></td>
+		<td></td>
+	</tr>
+</table>
+<br />
+<%end%>
+<hr />
+<div id="divId">
+    <iframe id="modalIframeId" width="100%" height="100%"
+    marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
+    title="Dialog Title">Your browser does not support javascript... that is really messed up!</iframe>
+</div>
