@@ -5,7 +5,7 @@ development:
   encoding: utf8
   database: gatherdb_dev
   username: root
-  password: thedrag0n
+  password:
   pool: 5
   
 
@@ -17,7 +17,7 @@ test:
   encoding: utf8
   database: gatherdb_test
   username: root
-  password: thedrag0n
+  password:
   pool: 5
 
 production:
@@ -25,5 +25,5 @@ production:
   encoding: utf8
   database: gatherdb
   username: root
-  password: thedrag0n
+  password:
   pool: 5

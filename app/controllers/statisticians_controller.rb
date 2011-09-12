@@ -29,9 +29,9 @@ class StatisticiansController < ApplicationController
     
     respond_to do |format|
       if @statistician.save
-        logger.debug "CSS PATH:#{Rails.root}/app/assets/stylesheets/statistician.css"
-        File.copy("#{Rails.root}/app/assets/stylesheets/statistician.css", 
-            "#{Rails.root}/app/assets/stylesheets/statistician_#{@statistician.id.to_s}.css")
+        logger.debug "CSS PATH:#{Rails.root}/public/stylesheets/statistician.css"
+        File.copy("#{Rails.root}/public/stylesheets/statistician.css", 
+            "#{Rails.root}/public/stylesheets/statistician_#{@statistician.id.to_s}.css")
         format.html { redirect_to(:action => "edit", :id => @statistician.id, :notice => 'Statistician was successfully updated.') }
         format.xml  { render :xml => @statistician, :status => :created, :location => @statistician }
       else
