@@ -62,9 +62,13 @@ $(document).ready(function() {
 	</fieldset>
 </div>
 <div class="field" style="clear:both">
+  <% if @question.matrix_columns == nil %>
   Columns (comma seperated):<br />
   <%= f.text_area :matrix_columns,:cols => "100",:rows => "2",
 					:value => "Strongly disagree,Disagree,Neither agree nor disagree,Agree,Strongly agree" %>
+  <%else%>
+  <%= f.text_area :matrix_columns,:cols => "100",:rows => "2" %>
+  <%end%>
 </div>
 <% if @question.id != nil %>
 <div id="canswers" style="clear:both">

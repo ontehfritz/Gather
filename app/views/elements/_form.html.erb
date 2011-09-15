@@ -11,10 +11,11 @@
   <% end %>
   <%= f.hidden_field :question_id %>
   <div class="field">
-	<%if @element.question.types == "Likert"%>Question Text<%else%><%= f.label :element_text, "Answer" %><%end%><br />
+	<%if @element.question.types.to_s == "Likert"%>Question Text<%else%><%= f.label :element_text, "Answer" %><%end%><br />
     <%= f.text_field :element_text%>
   </div>
-  <%if @element.question.types == "Likert"%>
+  <%=  @element.question.types %>
+  <%if @element.question.types.to_s == "Likert"%>
   Score (Ascending 1,2,3... or Descending 3, 2, 1....)<br />
   <%= select( "element", "score", { "Ascending" => "0", "Descending" => "-1"}) %>
   <%elsif @element.question.type != "Scale"%>
