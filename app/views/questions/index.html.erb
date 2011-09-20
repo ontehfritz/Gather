@@ -78,11 +78,11 @@ id="expand" name="expand"/>
   
   <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
 		<%= render :partial => "questions/" + q.types.downcase, :locals=>{:question=>q} %> 
-		<%= link_to image_tag("edit_small.png", :border => 0), :action => "edit", :question_id => q.id %>
+		<%= link_to image_tag("edit_small.png", :border => 0),[@section,q.becomes(Question)], :action => "edit"%>
 		<% if q.types == "MultipleChoiceRadio"%>
 			<%= link_to image_tag("sub_small.png", :border => 0), :action => "new", :id => q.id, :types => "FreeForm",:sub => "new" %>
 		<% end %>
-		<a href="" onclick="return"><%= image_tag("delete_small.png", :border => 0)%></a>
+		<%= link_to image_tag("delete_small.png", :border => 0), [@section,q.becomes(Question)],:confirm => 'Are you sure?', :method => :delete %>
 		<% subs = q.sub_questions %>
 	    <% sub_questions = Question.find(:all, :conditions => ["id IN (?)", subs.map {|s| s.question_sub_id}]).sort_by{|question| question.sort_index} %>
 		<% if sub_questions != nil %>
@@ -95,7 +95,7 @@ id="expand" name="expand"/>
 					<%= render :partial => "questions/" + s.types.downcase, :locals=>{:question=>s} %> 
 				</div>
 				<%= link_to image_tag("edit_small.png", :border => 0), :action => "edit", :question_id => s.id %>
-				<a href="" onclick="return"><%= image_tag("delete_small.png", :border => 0)%></a>
+				<%= link_to image_tag("delete_small.png", :border => 0), s.becomes(Question) ,:confirm => 'Are you sure?', :method => :delete %>
 				</li>
 			<% end %>
 			</ul>

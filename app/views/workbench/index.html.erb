@@ -98,7 +98,7 @@
 		onmouseover="this.className='althighlight'" 
     	onmouseout="this.className='row'" >
     <td>
-		<span style="font-size:medium; color:Green;"><b><%= link_to statistician.name, :controller => "sections", :action => "index", :statistician_id => statistician.id %></b></span><br />
+		<span style="font-size:medium; color:Green;"><b><%= link_to statistician.name, statistician_sections_path(statistician) %></b></span><br />
 		<span style="font-size:x-small; font-style:italic;"><b>Created:</b><%= statistician.created_at %></span>
 		<span style="font-size:x-small; font-style:italic;"><b>Modified:</b><%= statistician.updated_at %></span>
 	</td>

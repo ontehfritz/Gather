@@ -78,7 +78,7 @@ $(document).ready(function() {
 			<tr>
 		    	<td colspan="2">
 		    		<%= image_tag("edit_sections.png", :border => 0)%>
-		    		<%= link_to "Sections", :controller => "sections", :action => "index", :statistician_id => @statistician.id %>
+		    		<%= link_to("Sections", statistician_sections_path(@statistician)) %>
 		    	</td>
 			</tr>
 			

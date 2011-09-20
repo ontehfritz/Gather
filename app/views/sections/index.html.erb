@@ -2,7 +2,7 @@
 function showNewDialog(){
 	$("#divId").dialog({ title: 'Create Section' });
    	$("#divId").dialog("open");
-   	$("#modalIframeId").attr("src","/sections/<%= @statistician_id %>/new");
+   	$("#modalIframeId").attr("src","sections/new");
    	return false;
 }
 function showEditDialog(sectionID){
@@ -42,7 +42,7 @@ $(document).ready(function() {
     document.getElementById("sort_order").value = Order;
 });
 </script>
-<%= form_tag('save_sort') %>
+<%= form_tag(save_sort_statistician_path @statistician) %>
 <%= hidden_field_tag "sort_order"%>
 <h1>Listing sections</h1>
 <hr />
