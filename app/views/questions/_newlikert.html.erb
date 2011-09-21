@@ -1,13 +1,15 @@
 <script type="text/javascript">
 function showNewDialog(){
-   $("#divId").dialog("open");
-   $("#modalIframeId").attr("src","/elements/<%=@question.id %>/new");
-   return false;
+	$("#divId").dialog({ title: 'Create Answer' });
+   	$("#divId").dialog("open");
+   	$("#modalIframeId").attr("src","/questions/<%=@question.id %>/elements/new");
+   	return false;
 }
 function showEditDialog(id){
-   $("#divId").dialog("open");
-   $("#modalIframeId").attr("src","/elements/" + id + "/edit");
-   return false;
+	$("#divId").dialog({ title: 'Edit Answer' });
+   	$("#divId").dialog("open");
+   	$("#modalIframeId").attr("src","/questions/" + id + "/elements/edit");
+   	return false;
 }
 
 

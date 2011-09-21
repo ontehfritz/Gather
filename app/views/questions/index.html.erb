@@ -56,7 +56,7 @@ $(document).ready(function () {
    <%end%>
 });
 </script>
-<%= form_tag('save_sort') %>
+<%= form_tag(save_sort_section_url(@section)) %>
 <%= hidden_field_tag "sort_order"%>
 <%= hidden_field_tag "section_id",  @section.id%>
 
@@ -78,7 +78,7 @@ id="expand" name="expand"/>
   
   <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
 		<%= render :partial => "questions/" + q.types.downcase, :locals=>{:question=>q} %> 
-		<%= link_to image_tag("edit_small.png", :border => 0),[@section,q.becomes(Question)], :action => "edit"%>
+		<%= link_to image_tag("edit_small.png", :border => 0), edit_question_path(q.becomes(Question))%>
 		<% if q.types == "MultipleChoiceRadio"%>
 			<%= link_to image_tag("sub_small.png", :border => 0), :action => "new", :id => q.id, :types => "FreeForm",:sub => "new" %>
 		<% end %>

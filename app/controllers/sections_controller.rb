@@ -1,6 +1,33 @@
 class SectionsController < ApplicationController
   before_filter :authenticate_user!
   
+  
+  def save_sort
+    @section = Section.find(params[:section_id])
+    if params[:commit] == "Add Question"
+      redirect_to(:controller => "questions", :action => "new", :id => params[:section_id], :types => "FreeForm")
+      return
+    elsif params[:commit] == "Done"
+      #@section = Section.find(params[:section_id])
+      redirect_to(statistician_sections_path(@section.statistician))
+      return
+    end
+    
+    @order = params[:sort_order]
+    @order.split(',').each_with_index do |question, i|
+      Question.update(question, :sort_index => i+1)
+    end
+    questions = Question.where("section_id = ? and has_sub_question = 1", params[:section_id])
+    questions.each do |q|
+      suborder = params["sort_order_sub" + q.id.to_s]
+      suborder.split(',').each_with_index do |question, i|
+        Question.update(question, :sort_index => i+1)
+      end
+    end
+    
+    redirect_to(section_questions_path @section)
+  end
+  
   def index
     @sections = Section.where("statistician_id = ?", params[:statistician_id]).order("sort_index")
     @statistician_id = params[:statistician_id]

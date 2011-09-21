@@ -2,13 +2,13 @@
 function showNewDialog(){
 	$("#divId").dialog({ title: 'Create Answer' });
    	$("#divId").dialog("open");
-   	$("#modalIframeId").attr("src","/elements/<%=@question.id %>/new");
+   	$("#modalIframeId").attr("src","/questions/<%=@question.id %>/elements/new");
    	return false;
 }
 function showEditDialog(id){
 	$("#divId").dialog({ title: 'Edit Answer' });
    	$("#divId").dialog("open");
-   	$("#modalIframeId").attr("src","/elements/" + id + "/edit");
+   	$("#modalIframeId").attr("src","/questions/" + id + "/elements/edit");
    	return false;
 }
 function showAddSkipDialog(){

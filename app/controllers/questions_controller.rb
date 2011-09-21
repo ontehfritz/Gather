@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   before_filter :authenticate_user!
+  
   def index
     @questions = Question.where("section_id =?", params[:section_id]).order("sort_index")
     @section_id = params[:section_id]
@@ -9,30 +10,6 @@ class QuestionsController < ApplicationController
       format.html # index.html.erb
       format.xml  { render :xml => @questions }
     end
-  end
-
-  def save_sort
-    if params[:commit] == "Add Question"
-      redirect_to(:action => "new", :id => params[:section_id], :types => "FreeForm")
-      return
-    elsif params[:commit] == "Done"
-      @section = Section.find(params[:section_id])
-      redirect_to(:controller => "sections",:action => "index", :statistician_id => @section.statistician_id)
-      return
-    end
-    
-    @order = params[:sort_order]
-    @order.split(',').each_with_index do |question, i|
-      Question.update(question, :sort_index => i+1)
-    end
-    questions = Question.where("section_id = ? and has_sub_question = 1", params[:section_id])
-    questions.each do |q|
-      suborder = params["sort_order_sub" + q.id.to_s]
-      suborder.split(',').each_with_index do |question, i|
-        Question.update(question, :sort_index => i+1)
-      end
-    end
-    redirect_to(:action => "index", :section_id => params[:section_id])
   end
 
   def show
@@ -61,9 +38,9 @@ class QuestionsController < ApplicationController
   end
 
   def edit
-    @question = Question.find(params[:question_id])
+    @question = Question.find(params[:id])
     @question_type = @question.types.to_s
-    @question_image = QuestionImage.where(:question_id => params[:question_id]).first
+    @question_image = QuestionImage.where(:id => params[:id]).first
     
     if @question.is_sub == true
       sub_question = SubQuestion.find(:all, :conditions => ["question_sub_id = ?", @question.id]).first
@@ -115,7 +92,7 @@ class QuestionsController < ApplicationController
             Question.update(params[:parent_question_id], :has_sub_question => true)
           end
           
-          format.html { redirect_to(:action => "edit",:question_id => @question_new.id, :notice => 'Question was successfully created.') }
+          format.html { redirect_to(edit_question_url(@question_new), :notice => 'Question was successfully created.') }
           format.xml  { render :xml => @question, :status => :created, :location => @question }
         else
           @question = @question_new
@@ -156,9 +133,24 @@ class QuestionsController < ApplicationController
   def destroy
     @question = Question.find(params[:id])
     @question.destroy
-
+    
+    questions = []
+    if @question.is_sub 
+      parent_id = SubQuestion.where('question_sub_id = ?', @question.id).first.question_parent_id
+      questions = Question.find(parent_id).questions.order("sort_index")
+    else
+      questions = Section.find(@question.section.id).questions.order("sort_index")
+    end     
+    
+    i = 1
+    questions.each do |q| 
+      q.sort_index = i 
+      q.save 
+      i = i + 1
+    end
+    
     respond_to do |format|
-      format.html { redirect_to(questions_url) }
+      format.html { redirect_to(section_questions_url(@question.section)) }
       format.xml  { head :ok }
     end
   end
