@@ -8,7 +8,7 @@ function showNewDialog(){
 function showEditDialog(id){
 	$("#divId").dialog({ title: 'Edit Answer' });
    	$("#divId").dialog("open");
-   	$("#modalIframeId").attr("src","/questions/" + id + "/elements/edit");
+   	$("#modalIframeId").attr("src","/questions/<%=@question.id %>/elements/" + id + "/edit");
    	return false;
 }
 function showAddImage(){

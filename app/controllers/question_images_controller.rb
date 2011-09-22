@@ -77,9 +77,9 @@ class QuestionImagesController < ApplicationController
     @question_image = QuestionImage.find(params[:id])
     question_id = @question_image.question_id
     @question_image.destroy
-
+    question = Question.find(question_id)
     respond_to do |format|
-      format.html { redirect_to(:controller => "questions", :action => "edit",:question_id => question_id, :notice => 'Image was successfully deleted.') }
+      format.html { redirect_to(edit_question_path(question), :notice => 'Image was successfully deleted.') }
       format.xml  { head :ok }
     end
   end

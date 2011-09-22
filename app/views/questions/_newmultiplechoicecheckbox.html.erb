@@ -8,7 +8,7 @@ function showNewDialog(){
 function showEditDialog(id){
 	$("#divId").dialog({ title: 'Edit Answer' });
    	$("#divId").dialog("open");
-   	$("#modalIframeId").attr("src","/questions/" + id + "/elements/edit");
+   	$("#modalIframeId").attr("src","/questions/<%=@question.id %>/elements/" + id + "/edit");
    	return false;
 }
 function showAddImage(){
@@ -51,13 +51,14 @@ function showEditImage(id){
 			}
 		}).disableSelection();
 
-		$("#question_option_id").change(function() {
-			if($("#question_option_id").val() == "3") {
-				$("#additional").show();
-			} else {
-				$("#additional").hide();
-			}
-		});
+		$("#question_option_id").change(function () {
+    	if ($("#question_option_id").val() == "3") {
+        	$("#additional").show();
+        }
+        else {
+        	$("#additional").hide();
+        }
+    	});
 		var Order = $("#sort tbody").sortable('toArray').toString();
 		document.getElementById("sort_order").value = Order;
 	});
@@ -83,7 +84,11 @@ function showEditImage(id){
 		<br />
 		<%= select("question", "option_id", Option.all.collect {|t| [ t.name, t.id ] }) %>
 		<br />
+		<% if @question.option_id == 3 %>
+		<div id="additional" style="display:block;">
+		<%else%>
 		<div id="additional" style="display:none;">
+		<%end%>
 			<%= f.label :additional_comments %>
 			<br />
 			<%= f.text_field :additional_comments %>

@@ -40,7 +40,7 @@ class QuestionsController < ApplicationController
   def edit
     @question = Question.find(params[:id])
     @question_type = @question.types.to_s
-    @question_image = QuestionImage.where(:id => params[:id]).first
+    @question_image = QuestionImage.where(:question_id => params[:id]).first
     
     if @question.is_sub == true
       sub_question = SubQuestion.find(:all, :conditions => ["question_sub_id = ?", @question.id]).first
@@ -121,7 +121,7 @@ class QuestionsController < ApplicationController
     
     respond_to do |format|
       if @question.update_attributes(params[:question])
-        format.html { redirect_to(:action => "edit",:question_id => @question.id, :notice => 'Question was successfully created.') }
+        format.html { redirect_to(edit_question_path(@question), :notice => 'Question was successfully Updated.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

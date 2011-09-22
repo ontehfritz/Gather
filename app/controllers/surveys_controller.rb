@@ -250,6 +250,10 @@ class SurveysController < ApplicationController
     
     if @errors == false
       if params[:commit] == "Next"
+         if @sections.index(@section) + 1 >= @sections.length
+           redirect_to(:action => "finish", :id => @section.statistician.id)
+           return
+         end
          redirect_to(:action => "section",:id => @sections[@sections.index(@section) + 1].id)
       elsif params[:commit] == "Back"
          redirect_to(:action => "section",:id => @sections[@sections.index(@section) - 1].id)

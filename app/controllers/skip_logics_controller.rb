@@ -44,9 +44,10 @@ class SkipLogicsController < ApplicationController
     @skip_logic = SkipLogic.find(params[:id])
     question_id = @skip_logic.question_id
     @skip_logic.destroy
+    question = Question.find(question_id)
 
     respond_to do |format|
-      format.html {redirect_to(:controller => "questions", :action => "edit",:question_id => @skip_logic.question_id, :notice => 'Answer was successfully deleted.') }
+      format.html {redirect_to(edit_question_path(question), :notice => 'Answer was successfully deleted.') }
       format.xml  { head :ok }
     end
   end

@@ -1,14 +1,14 @@
 <script type="text/javascript">
 function showNewDialog(){
-	$("#divId").dialog({ title: 'Create Answer' });
+	$("#divId").dialog({ title: 'Create Question' });
    	$("#divId").dialog("open");
    	$("#modalIframeId").attr("src","/questions/<%=@question.id %>/elements/new");
    	return false;
 }
 function showEditDialog(id){
-	$("#divId").dialog({ title: 'Edit Answer' });
+	$("#divId").dialog({ title: 'Edit Question' });
    	$("#divId").dialog("open");
-   	$("#modalIframeId").attr("src","/questions/" + id + "/elements/edit");
+   	$("#modalIframeId").attr("src","/questions/<%=@question.id %>/elements/" + id + "/edit");
    	return false;
 }
 

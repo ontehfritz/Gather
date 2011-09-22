@@ -3,7 +3,7 @@ class ElementsController < ApplicationController
   def new  
     @element = Element.new
     @element.question_id = params[:question_id];
-    @question_type = params[:question_type];
+    @question_type = Question.find( @element.question_id).types.to_s
     
     render :layout => "dialog"
   end
@@ -48,15 +48,17 @@ class ElementsController < ApplicationController
     @element = Element.find(params[:id])
     element_question_id = @element.question_id
     @element.destroy
+    question = Question.find(element_question_id)
 
     respond_to do |format|
-      format.html {redirect_to(:controller => "questions", :action => "edit",:question_id => element_question_id, :notice => 'Answer was successfully deleted.') }
+      format.html {redirect_to(edit_question_path(question.becomes(Question)), :notice => 'Answer was successfully deleted.') }
       format.xml  { head :ok }
     end
   end
   
   def edit
     @element = Element.find(params[:id])
+    @question_type = @element.question.types.to_s
     render :layout => "dialog"
   end
 

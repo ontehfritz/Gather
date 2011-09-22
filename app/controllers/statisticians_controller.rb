@@ -13,7 +13,8 @@ class StatisticiansController < ApplicationController
     @order.split(',').each_with_index do |section, i|
       Section.update(section, :sort_index => i+1)
     end
-    redirect_to(:action => "index", :statistician_id => params[:id])
+    statistician = Statistician.find(params[:id])
+    redirect_to(statistician_sections_path(statistician))
   end
   
   def index
@@ -46,7 +47,7 @@ class StatisticiansController < ApplicationController
         logger.debug "CSS PATH:#{Rails.root}/public/stylesheets/statistician.css"
         File.copy("#{Rails.root}/public/stylesheets/statistician.css", 
             "#{Rails.root}/public/stylesheets/statistician_#{@statistician.id.to_s}.css")
-        format.html { redirect_to(:action => "edit", :id => @statistician.id, :notice => 'Statistician was successfully updated.') }
+        format.html { redirect_to(edit_statistician_path(@statistician), :notice => 'Statistician was successfully created.') }
         format.xml  { render :xml => @statistician, :status => :created, :location => @statistician }
       else
         format.html { render :action => "new" }
@@ -65,7 +66,7 @@ class StatisticiansController < ApplicationController
 
     respond_to do |format|
       if @statistician.update_attributes(params[:statistician])
-        format.html { redirect_to(:action => "edit", :notice => 'Statistician was successfully updated.') }
+        format.html { redirect_to(edit_statistician_path(@statistician), :notice => 'Statistician was successfully updated.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -93,16 +94,26 @@ class StatisticiansController < ApplicationController
       if (params[:password] != nil && params[:password] != "") && (params[:password] == params[:confirm_password])
         @complete = true
         Statistician.update(@statistician.id, :unlock_key => params[:password], :is_password_required => true)
+        redirect_to(:controller => "statisticians", :action => "close_dialog")
+        return 
       else
         @error = true
       end
     elsif params[:commit] == "Disable"
       Statistician.update(@statistician.id, :unlock_key => nil, :is_password_required => false)
       @complete = true
+      redirect_to(:controller => "statisticians", :action => "close_dialog")
+      return
     elsif params[:commit] == "Cancel"
       @complete = true
+      redirect_to(:controller => "statisticians", :action => "close_dialog")
+      return
     end
     
     render :layout => "dialog"
+  end
+  
+  def close_dialog
+    #controller simply closes dialog see view for details
   end
 end

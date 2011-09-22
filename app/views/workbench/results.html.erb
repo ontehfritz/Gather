@@ -20,6 +20,7 @@ $(document).ready(function() {
 <h2><%= @statistician.name %></h2>
 Created Date: <b><%= @statistician.created_at.to_s %></b><br />
 <hr />
+<% if @questions != nil %>
 <% @questions.each do |result| %>
 <div class="QuestionResponse"><%= result.question_text.html_safe %> </div>
 <table class="AnswerResponses"> 
@@ -50,6 +51,7 @@ Created Date: <b><%= @statistician.created_at.to_s %></b><br />
 	</tr>
 </table>
 <br />
+<%end%>
 <%end%>
 <hr />
 <div id="divId">
