@@ -56,8 +56,66 @@ class WorkbenchController < ApplicationController
   end
   
   def export_results
-    @survey = Survey.find(params[:id])
+    @headers = Array.new
+    @headers.push("Subject_id", "FirstName", "LastName", "DateCompleted")
+    @statistician = Statistician.find(params[:id])
+    @responses = UserCompletedSurvey.find(:all, :conditions => {:statistician_id => params[:id]})
+    @statistician.sections.each do |s|
+      if @questions != nil then 
+        @questions = @questions + s.questions
+      else
+        @questions = s.questions
+      end
+    end
     
+    @questions.each do |q|
+       if q.question_type.is_multi_answer == true
+          q.elements.each do |answer|
+            @headers.push("#{q.question_text}-#{answer.element_text}")
+          end
+       else
+          @headers.push(q.question_text)
+       end
+    end
+    
+    csv_string = FasterCSV.generate do |csv| 
+        csv << @headers
+        #row = Array.new
+        @responses.each do |r|
+          row = Array.new
+          row.push(r.subject.id)
+          row.push(r.subject.first_name)
+          row.push(r.subject.last_name)
+          row.push(r.created_at)
+          @questions.each do |q|
+            if q.question_type.is_multi_answer == true
+              q.elements.each do |answer|
+                 response = Response.find(:all, :conditions => {:question_id => q.id, :element_id => answer.id, :subject_id => r.subject.id}).first
+                 response == nil ? row.push(nil) : row.push(response.element.element_text)
+                 #row.push(response.element_id)
+              end
+            else
+              response = Response.where("question_id = ? and subject_id = ?", q.id,r.subject.id).first
+              if response != nil
+                if response.answer_text != nil
+                  row.push(response.answer_text)
+                else
+                  row.push(response.element.element_text)
+                end
+              else
+                row.push(nil)
+              end
+                 #response = Response.find(:all, :conditions => {:question_id => q.id, :element_id => q.elements.first != nil ? q.elements.first.id : nil })
+                 #response != nil ? row.push(response.element_id) : Response.find(:all, :conditions => {:question_id => q.id})
+            end
+          end
+          csv << row
+        end
+        
+    end
+    send_data csv_string, 
+            :type => 'text/csv; charset=iso-8859-1; header=present', 
+            :disposition => "attachment; filename=results.csv" 
   end
   
   def question_responses

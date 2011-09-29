@@ -1,11 +1,11 @@
 ------------------||Gather v0.2||-------------------
 Gather is a web based survey server.
-It allows for the creation, distribution and
+It allows for the creation, distribution, and
 data collection of surveys. The goal of the 
 project is to keep users in control of their
 research data, host their own server, do whatever 
-they want with the back end data and expand Gather 
-into exactly they need.
+they want with the back end data and customize Gather 
+exactly to their needs.
 ----------------------------------------------------
 
 

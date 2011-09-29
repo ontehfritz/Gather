@@ -11,6 +11,7 @@ class Question < ActiveRecord::Base
   belongs_to :section
   belongs_to :option
   belongs_to :input_type
+  belongs_to :question_type
   has_one :question_image
   has_many :responses,:dependent => :destroy
   has_many :elements,:dependent => :destroy

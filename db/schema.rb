@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(:version => 20110819141339) do
     t.integer  "section_id"
     t.integer  "option_id"
     t.integer  "input_type_id"
+    t.integer  "question_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

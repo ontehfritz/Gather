@@ -54,6 +54,7 @@ class QuestionsController < ApplicationController
        
     if params[:commit] == "Save"
       @question_new = @question.types.constantize.new(params[:question])
+      @question_new.question_type_id = QuestionType.find(:all,:conditions => {:type_name => @question_new.types}).first.id
       
       if @question.is_sub
         subs = Question.where(:id => params[:parent_question_id]).first.sub_questions

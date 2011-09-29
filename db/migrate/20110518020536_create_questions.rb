@@ -17,6 +17,7 @@ class CreateQuestions < ActiveRecord::Migration
       t.references :section
       t.references :option
       t.references :input_type
+      t.references :question_type
 
       t.timestamps
     end
