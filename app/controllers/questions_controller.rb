@@ -116,7 +116,7 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id]).becomes(Question)
     
     if params[:commit] == "Cancel" || params[:commit] == "Done"
-      redirect_to(:action => "index",:section_id => @question.section_id)
+      redirect_to(:action => "index", :section_id => @question.section_id)
       return
     end
     

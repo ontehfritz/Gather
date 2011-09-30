@@ -171,14 +171,14 @@ class SurveysController < ApplicationController
     answered = Array.new
     Response.delete_all(["subject_id = ? and question_id in (?)", session[:subject_id], @section.questions.map {|q| q.id}])
     #This saving response code works well and is reliable. However the rigidness of the code 
-    #is a pile shit. This design needs to change and will change next release
+    #is a pile shit. Look at it! who wants to maintain this, not me! This design needs to change and will change next release
     #thinking different response types with overwritten save methods
     if params[:questions] != nil
       params[:questions].values.each do |q|
         if q[:multiple_answer] == "true"
           flag_answered = false 
           if q[:answer_id] != nil
-            q[:answer_id].values.each do |a|
+              q[:answer_id].values.each do |a|
               if a[:id] == nil and a[:answer] != ""
                 response = Response.new(:question_id => q[:question], 
                   :answer_text => a[:answer], :subject_id => session[:subject_id], :element_id => a[:id])
@@ -197,6 +197,9 @@ class SurveysController < ApplicationController
                 end
               end
             end
+          else
+             response = Response.new(:question_id => q[:question], 
+                    :answer_text => [:answer] == "" ? nil : q[:answer], :subject_id => session[:subject_id])
           end
           if flag_answered == true
             answered.push q[:question]  
@@ -210,7 +213,7 @@ class SurveysController < ApplicationController
                 end
               end
           response = Response.new(:question_id => q[:question], 
-            :answer_text => q[:answer], :subject_id => session[:subject_id], :element_id => q[:answer_id])
+            :answer_text => q[:answer] == "" ? nil : q[:answer], :subject_id => session[:subject_id], :element_id => q[:answer_id])
           if (q[:answer_id] != "" && q[:answer_id] != nil) || (q[:answer] != nil && q[:answer] != "")
             answered.push q[:question]
             response.save

@@ -73,8 +73,15 @@ class WorkbenchController < ApplicationController
           q.elements.each do |answer|
             @headers.push("#{q.question_text}-#{answer.element_text}")
           end
+          if q.option_id  != nil and q.option.id != 1
+            @headers.push("#{q.question_text}-#{q.option.name}")
+          end
+           
        else
           @headers.push(q.question_text)
+          if q.option_id  != nil and q.option.id != 1
+            @headers.push("#{q.question_text}-#{q.option.name}")
+          end
        end
     end
     
@@ -91,7 +98,16 @@ class WorkbenchController < ApplicationController
             if q.question_type.is_multi_answer == true
               q.elements.each do |answer|
                  response = Response.find(:all, :conditions => {:question_id => q.id, :element_id => answer.id, :subject_id => r.subject.id}).first
-                 response == nil ? row.push(nil) : row.push(response.element.element_text)
+                 if response == nil
+                   row.push(nil)
+                 else
+                   if response.answer_text != nil and response.answer_text != ''
+                      row.push(response.answer_text)
+                   else
+                      row.push(response.element.element_text)
+                   end
+                 end
+                 #response == nil ? row.push(nil) : row.push(response.element.element_text)
                  #row.push(response.element_id)
               end
             else

@@ -77,9 +77,9 @@ id="expand" name="expand"/>
   <li id=<%= q.id %>>
   
   <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-		<%= render :partial => "questions/" + q.types.downcase, :locals=>{:question=>q} %> 
+		<%= render :partial => "questions/" + q.class.name.downcase, :locals=>{:question=>q} %> 
 		<%= link_to image_tag("edit_small.png", :border => 0), edit_question_path(q.becomes(Question))%>
-		<% if q.types == "MultipleChoiceRadio"%>
+		<% if q.class.name == "MultipleChoiceRadio"%>
 			<%= link_to image_tag("sub_small.png", :border => 0), :action => "new", :id => q.id, :types => "FreeForm",:sub => "new" %>
 		<% end %>
 		<%= link_to image_tag("delete_small.png", :border => 0), [@section,q.becomes(Question)],:confirm => 'Are you sure?', :method => :delete %>
@@ -92,9 +92,9 @@ id="expand" name="expand"/>
 				<li id=<%= s.id %>>
 				<span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
 				<div id="branch_<%= s.id %>" <%if s.is_hidden == true%> style="display:block" <% end %> class="branch" >
-					<%= render :partial => "questions/" + s.types.downcase, :locals=>{:question=>s} %> 
+					<%= render :partial => "questions/" + s.class.name.downcase, :locals=>{:question=>s} %> 
 				</div>
-				<%= link_to image_tag("edit_small.png", :border => 0), :action => "edit", :question_id => s.id %>
+				<%= link_to image_tag("edit_small.png", :border => 0), edit_question_path(s.becomes(Question))%>
 				<%= link_to image_tag("delete_small.png", :border => 0), s.becomes(Question) ,:confirm => 'Are you sure?', :method => :delete %>
 				</li>
 			<% end %>

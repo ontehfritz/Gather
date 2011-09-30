@@ -1,7 +1,7 @@
 <%= hidden_field_tag("questions[" + question.id.to_s + "][question]", question.id.to_s ) %>
 <%= hidden_field_tag("questions[" + question.id.to_s + "][is_answer_required]", question.is_answer_required.to_s ) %>
 <%= hidden_field_tag("questions[" + question.id.to_s + "][multiple_answer]", "true")%>
-<%= hidden_field_tag("questions[" + question.id.to_s + "][type]", question.type ) %>
+<%= hidden_field_tag("questions[" + question.id.to_s + "][type]", question.class.name ) %>
 <% responses = Response.where("question_id = :question_id and subject_id = :subject_id",
 					{:question_id => question.id,:subject_id => session[:subject_id]}) %>
 <% if question.errors.any? %>
