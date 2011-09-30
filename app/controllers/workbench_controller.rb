@@ -73,13 +73,13 @@ class WorkbenchController < ApplicationController
           q.elements.each do |answer|
             @headers.push("#{q.question_text}-#{answer.element_text}")
           end
-          if q.option_id  != nil and q.option.id != 1
+          if q.option_id  != nil and q.option.id == 3
             @headers.push("#{q.question_text}-#{q.option.name}")
           end
            
        else
           @headers.push(q.question_text)
-          if q.option_id  != nil and q.option.id != 1
+          if q.option_id  != nil and q.option.id == 3
             @headers.push("#{q.question_text}-#{q.option.name}")
           end
        end
@@ -110,16 +110,42 @@ class WorkbenchController < ApplicationController
                  #response == nil ? row.push(nil) : row.push(response.element.element_text)
                  #row.push(response.element_id)
               end
-            else
-              response = Response.where("question_id = ? and subject_id = ?", q.id,r.subject.id).first
-              if response != nil
-                if response.answer_text != nil
+              if q.option_id == 3 
+                response = Response.where("question_id = ? and subject_id = ? and answer_text IS NOT NULL", q.id,r.subject.id).first
+                if response != nil
                   row.push(response.answer_text)
                 else
-                  row.push(response.element.element_text)
+                  row.push(nil)
                 end
+              end
+            else
+              
+              logger.debug "type : #{q.type.downcase}"
+              if q.type.downcase == "freeform"
+                response = Response.where("question_id = ? and subject_id = ?", q.id,r.subject.id).first
+                row.push(response == nil ? nil : response.answer_text)
               else
-                row.push(nil)
+                response = Response.where("question_id = ? and subject_id = ? and element_id IS NOT NULL", q.id,r.subject.id).first
+                if response != nil
+                  if response.answer_text != nil
+                    row.push(response.answer_text)
+                  else
+                    row.push(response.element.element_text)
+                  end
+                else
+                  row.push(nil)
+                end
+              end
+              
+              
+              
+              if q.option_id == 3 
+                response = Response.where("question_id = ? and subject_id = ? and answer_text IS NOT NULL and element_id IS NULL", q.id,r.subject.id).first
+                if response != nil
+                  row.push(response.answer_text)
+                else
+                  row.push(nil)
+                end
               end
                  #response = Response.find(:all, :conditions => {:question_id => q.id, :element_id => q.elements.first != nil ? q.elements.first.id : nil })
                  #response != nil ? row.push(response.element_id) : Response.find(:all, :conditions => {:question_id => q.id})

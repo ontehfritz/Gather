@@ -49,9 +49,9 @@
 			<br />
 			<% response = responses.select {|r| r.answer_text != nil }.first %>
 			<%if response != nil%>
-				<%= text_field_tag("questions[" + question.id.to_s + "][answer]",response.answer_text)%>
+				<%= text_field_tag("questions[" + question.id.to_s + "][additional_text]", response.answer_text)%>
 			<%else%>
-				<%= text_field_tag("questions[" + question.id.to_s + "][answer]")%>
+				<%= text_field_tag("questions[" + question.id.to_s + "][additional_text]")%>
 			<% end %>
 		<% end%>
 	</li>

@@ -176,6 +176,12 @@ class SurveysController < ApplicationController
     if params[:questions] != nil
       params[:questions].values.each do |q|
         if q[:multiple_answer] == "true"
+          if q[:additional_text] != nil and q[:additional_text] != "" 
+            response = Response.new(:question_id => q[:question], 
+                    :answer_text => q[:additional_text], :subject_id => session[:subject_id])
+                    
+            response.save
+          end
           flag_answered = false 
           if q[:answer_id] != nil
               q[:answer_id].values.each do |a|
@@ -196,10 +202,7 @@ class SurveysController < ApplicationController
                   response.save
                 end
               end
-            end
-          else
-             response = Response.new(:question_id => q[:question], 
-                    :answer_text => [:answer] == "" ? nil : q[:answer], :subject_id => session[:subject_id])
+            end   
           end
           if flag_answered == true
             answered.push q[:question]  
@@ -212,6 +215,14 @@ class SurveysController < ApplicationController
                   user_skip.save
                 end
               end
+              
+          if q[:additional_text] != nil and q[:additional_text] != "" 
+            response = Response.new(:question_id => q[:question], 
+                    :answer_text => q[:additional_text], :subject_id => session[:subject_id])
+                    
+            response.save
+          end
+          
           response = Response.new(:question_id => q[:question], 
             :answer_text => q[:answer] == "" ? nil : q[:answer], :subject_id => session[:subject_id], :element_id => q[:answer_id])
           if (q[:answer_id] != "" && q[:answer_id] != nil) || (q[:answer] != nil && q[:answer] != "")

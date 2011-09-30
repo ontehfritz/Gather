@@ -22,6 +22,9 @@ Created Date: <b><%= @statistician.created_at.to_s %></b><br />
 <hr />
 <% if @questions != nil %>
 <% @questions.each do |result| %>
+<% if result.is_sub %>
+<div> Sub Question</div>
+<%end%>
 <div class="QuestionResponse"><%= result.question_text.html_safe %> </div>
 <table class="AnswerResponses"> 
 		<%result.elements.each do |e|%>
