@@ -20,6 +20,8 @@ $(document).ready(function() {
 <h2><%= @statistician.name %></h2>
 Created Date: <b><%= @statistician.created_at.to_s %></b><br />
 <hr />
+Export: <%= link_to "CSV", "/workbench/#{@statistician.id}/export_results"%>
+<hr />
 <% if @questions != nil %>
 <% @questions.each do |result| %>
 <% if result.is_sub %>

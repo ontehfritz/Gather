@@ -136,9 +136,7 @@ class WorkbenchController < ApplicationController
                   row.push(nil)
                 end
               end
-              
-              
-              
+           
               if q.option_id == 3 
                 response = Response.where("question_id = ? and subject_id = ? and answer_text IS NOT NULL and element_id IS NULL", q.id,r.subject.id).first
                 if response != nil
