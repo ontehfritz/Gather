@@ -163,4 +163,33 @@ class WorkbenchController < ApplicationController
      @responses = Response.find(:all, :conditions => ['question_id = ?', params[:id]])
      render :layout => "dialog"
   end
+  
+  def list_results
+    @completed = UserCompletedSurvey.paginate(:conditions =>['statistician_id =?', params[:id]], :page => params[:page], :per_page => 20)
+  end
+  
+  def view_survey
+    @section = Section.find(params[:section_id])
+    @subject_id = params[:subject_id]
+    @statistician = @section.statistician
+    session[:subject_id] = @subject_id
+    @sections = Section.find(:all, :conditions => ["statistician_id = (?)", @section.statistician_id], :order => "sort_index")
+    
+    if params[:commit] == "Next"
+         if @sections.index(@section) + 1 >= @sections.length
+           redirect_to(:action => "list_results", :id => @section.statistician.id, :page => 1)
+           return
+         end
+         redirect_to(:action => "view_survey",:section_id => @sections[@sections.index(@section) + 1].id, :subject_id => @subject_id)
+         return 
+    elsif params[:commit] == "Back"
+      redirect_to(:action => "view_survey",:section_id => @sections[@sections.index(@section) - 1].id, :subject_id => @subject_id)
+      return
+    elsif params[:commit] == "Finish"
+      redirect_to(:action => "list_results", :id => @section.statistician.id, :page => 1)
+      return
+    end
+     
+    render :layout => "statistician"
+  end  
 end

@@ -45,6 +45,8 @@ Gather::Application.routes.draw do
   match 'workbench/:id/results' => 'workbench#results'
   match 'workbench/:id/question_responses' => 'workbench#question_responses'
   match 'workbench/:id/export_results' => 'workbench#export_results'
+  match 'workbench/:id/list_results/:page' => 'workbench#list_results'
+  match 'workbench/:section_id/view_survey/:subject_id' => 'workbench#view_survey'
   
   #survey -------------------------------------------------------------------
   match 'surveys/:id/subject_authenticate/' => 'surveys#subject_authenticate'

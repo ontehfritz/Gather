@@ -1,0 +1,72 @@
+<% content_for :survey_title, @section.statistician.name %>
+<h3><%= @section.name %></h3>
+<p><%= @section.description.html_safe %></p>
+<hr />
+<%= form_tag() %>
+<% @section.questions.each do |q|%>	
+	<% if q.is_sub == false %>
+		<%= render :partial => "questions/" + q.types.downcase, :locals=>{:question=>q} %> 
+		<% subs = q.sub_questions %>
+		<% sub_questions = Array.new %>
+		<% subs.each do |s|%>
+			<% response = Response.where("question_id = :question_id and subject_id = :subject_id and element_id = :element_id",
+					{:question_id => q.id,:subject_id => @subject_id, :element_id => s.element_id} ).first %>
+			<% question = @section.questions.find_all{|item| item.id == s.question_sub_id}.first %>
+			<% if response != nil %>
+				<% question.is_hidden = false %>
+			<% end %>
+			<% sub_questions.push(question) %>
+		<% end %>
+		
+		<% if sub_questions.length > 0 %>
+			<% sub_questions = sub_questions.sort_by{|question| question.sort_index} %>
+			<script>
+					$("input[name='questions[<%=  q.id.to_s %>][answer_id]']").click(function () {
+						
+			<% subs.each do |sub|%>
+						<% if sub.element_id != nil %>
+	       					if ($("input[name='questions[<%=  q.id.to_s %>][answer_id]']:checked").val() == <%=sub.element_id.to_s%>){
+	                			$('#branch_<%=sub.question_sub_id.to_s %>').show();
+	       					}
+	       					else{
+	                			$('#branch_<%=sub.question_sub_id.to_s %>').hide();
+	            			}
+						<%end%>
+			<% end %>
+					});
+			</script>
+			<ul style=" list-style-type:none;">	
+			<% sub_questions.each do |s|%>
+				<li>
+				<div id="branch_<%= s.id %>" <%if s.is_hidden == true%> style="display:none" <% end %> class="branch" >
+					<%= render :partial => "questions/" + s.types.downcase, :locals=>{:question=>s} %> 
+				</div>
+				</li>
+			<% end %>
+			</ul>
+		<% end %>
+	<% end %>
+<br />
+<% end %>
+<%if @section.statistician.sections.first.id != @section.id%>
+<%= submit_tag("Back")%>
+<% end %>
+<%if @section.statistician.sections.last.id != @section.id%>
+<%= submit_tag("Next")%>
+<% end %>	
+<%if @section.statistician.sections.last.id == @section.id%>
+<%= submit_tag("Finish")%>
+<% end %>
+</form>
+<hr />
+<table>
+<tr>
+<% @section.statistician.sections.count.times do |i|%>
+<% if @section.statistician.sections[i].id == @section.id %>
+<td style=" background-color: Black; color:White"><%= (i + 1).to_s %></td>
+<%else%>
+<td><%= (i + 1).to_s %></td>
+<%end%>
+<% end %>
+</tr>
+</table>

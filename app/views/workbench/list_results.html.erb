@@ -1,0 +1,22 @@
+<h3>Completed Surveys</h3>
+<hr />
+<table>
+  <tr>
+  	<th>
+  		Respondant
+  	</th>
+  	<th>
+  		Completed Date
+  	</th>
+  </tr>
+  <% @completed.each do |response| %>
+  <tr>
+  	<td><a href=<%= "/workbench/#{response.statistician.sections.first.id}/view_survey/#{response.subject.id}"%>><%= response.subject.first_name %></a></td>
+  	<td><%= response.created_at %></td>
+  </tr>
+    
+  <% end %>
+</table>
+
+<hr />
+<%= will_paginate @completed %>
