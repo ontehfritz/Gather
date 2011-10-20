@@ -3,6 +3,13 @@ class Statistician < ActiveRecord::Base
   validates_presence_of :intro
   validates_presence_of :outro
   
+  def image_file=(input_data)
+    self.file_name = input_data.original_filename
+    self.content_type = input_data.content_type.chomp
+    self.image_data = input_data.read
+  end
+  
+  
   def authentication_mode
     if read_attribute(:is_anonymous)
       "anonymous"
@@ -31,5 +38,5 @@ class Statistician < ActiveRecord::Base
   end
   
   has_many :sections, :dependent => :destroy
-  has_many :user_completed_surveys
+  has_many :user_completed_surveys, :dependent => :destroy
 end

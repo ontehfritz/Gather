@@ -3,7 +3,8 @@
 	<p>
 	<%= @statistician.intro.html_safe %>
 	</p>
-	<%= form_tag('begin') %>
+<%= form_tag('begin') %>
+	<%= hidden_field_tag("id", @statistician.id)%>
 	<div>
 	<%= submit_tag("Agree")%>
 	<%= submit_tag("No thanks")%>

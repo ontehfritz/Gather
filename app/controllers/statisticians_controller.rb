@@ -1,6 +1,6 @@
 require 'ftools'
 class StatisticiansController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, :except => [:show_logo]  
   
   
   def save_sort
@@ -112,6 +112,57 @@ class StatisticiansController < ApplicationController
     
     render :layout => "dialog"
   end
+  
+  def new_logo
+    @statistician = Statistician.find(params[:id])
+    
+    respond_to do |format|
+      format.html {render :layout => "dialog"}# new.html.erb
+      format.xml  { render :xml => @statistician }
+    end
+  end
+  
+  def create_logo
+    @statistician = Statistician.find(params[:id])
+
+    respond_to do |format|
+      if @statistician.update_attributes(params[:statistician])
+        format.html { redirect_to(close_dialog_statistician_path(@statistician)) }
+        format.xml  { render :xml => @statistician, :status => :created, :location => @statistician}
+      else
+        format.html { render :action => "new_logo" }
+        format.xml  { render :xml => @statistician.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+  
+  def show_logo
+    @statistician = Statistician.find(params[:id])
+
+    @image = @statistician.image_data
+    send_data @image, :type => @statistician.content_type, 
+        :filename => @statistician.file_name, :disposition => 'inline'
+  end
+  
+  def edit_logo
+    @statistician = Statistician.find(params[:id])
+    render :layout => "dialog"
+  end
+  
+  def update_logo
+    @statistician = Statistician.find(params[:id])
+
+    respond_to do |format|
+      if @statistician.update_attributes(params[:statistician])
+        format.html { redirect_to(close_dialog_statistician_path(@statistician)) }
+        format.xml  { render :xml => @statistician, :status => :created, :location => @statistician}
+      else
+        format.html { render :action => "new_logo" }
+        format.xml  { render :xml => @statistician.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+  
   
   def close_dialog
     #controller simply closes dialog see view for details

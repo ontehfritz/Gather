@@ -25,6 +25,12 @@ Gather::Application.routes.draw do
   resources :statisticians do 
     member do
         post 'save_sort'
+        get 'close_dialog'
+        get 'new_logo'
+        get 'show_logo'
+        get 'edit_logo'
+        post 'update_logo'
+        post 'create_logo'
     end
     resources :sections 
   end

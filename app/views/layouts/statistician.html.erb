@@ -11,7 +11,13 @@
 <div class="page">
 	<div id="header">
 		<div id="title">
-        	<div id="logo"></div>
+        	<div id="logo">
+        		<% if @statistician.file_name == nil %>
+  	 				<%= image_tag("logo.png", :border => 0, :size => "50x50") %>
+  				<% else %>
+     				<%= image_tag(show_logo_statistician_url(@statistician), :alt => @statistician.name, :border => 0, :size => "50x50") %>
+  				<% end %>
+        	</div>
             <div id="statistician_name"><h2><%= yield :survey_title %></h2></div>
         </div>
         <div id="logindisplay">

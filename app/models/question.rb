@@ -20,4 +20,5 @@ class Question < ActiveRecord::Base
   #has_many(:reverse_sub_questions, :class_name => :SubQuestion,
   #    :foreign_key => :question_sub_id, :dependent => :destroy)
   has_many :questions, :through => :sub_questions, :source => :question_sub, :dependent => :destroy
+  #accepts_nested_attributes_for :elements, :reject_if => lambda { |a| a[:element_text].blank? }, :allow_destroy => true
 end

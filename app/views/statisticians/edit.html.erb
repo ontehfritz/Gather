@@ -5,6 +5,20 @@ function showPwdDialog(){
    return false;
 }
 
+function showAddImage(){
+	$("#divId").dialog({ title: 'Add Image' });
+   	$("#divId").dialog("open");
+   	$("#modalIframeId").attr("src","/statisticians/<%=@statistician.id %>/new_logo");
+   	return false;
+}
+
+function showEditImage(id){
+	$("#divId").dialog({ title: 'Edit Image' });
+	$("#divId").dialog("open");
+	$("#modalIframeId").attr("src","/statisticians/<%=@statistician.id %>/edit_logo");
+	return false;
+}
+
 $(document).ready(function() {
    $("#divId").dialog({
            autoOpen: false,
@@ -34,10 +48,27 @@ $(document).ready(function() {
 
   <div style="float:left">
 	  <div class="field">
-	    <%= f.label :name, "Survey Name:"%><br />
-	    <%= f.text_field :name %>
+	  	<div style="float:left;">
+	 	<% if @statistician.file_name == nil %>
+  	 		<%= image_tag("logo.png", :border => 0, :size => "80x80") %>
+  		<% else %>
+     		<%= image_tag(show_logo_statistician_url(@statistician), :alt => @statistician.name, :border => 0, :size => "80x80") %>
+  		<% end %>
+  		<br />
+  		<% if @statistician.file_name != nil %>
+			<a href="" onclick="return showEditImage()">Add/Edit Image</a>
+		<% else %>
+			<a href="" onclick="return showAddImage()">Add/Edit Image</a>
+		<% end %>
+		</div>
+		<div >
+		    <%= f.label :name, "Survey Name:"%><br />
+		    <%= f.text_field :name %>
+	    </div>
 	  </div>
-	  <div class="field">
+	  <br />
+	  <br />
+	  <div class="field" style="clear:both;">
 	    <%= f.label :intro,"Message to display at beginning of survey:" %><br />
 	    <%= f.text_area :intro, :size => "50x10"%>
 	  </div>

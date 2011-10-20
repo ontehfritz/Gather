@@ -1,0 +1,22 @@
+<%= form_for(@statistician, :url => { :action => "update_logo" }, :method => "post") do |f| %>
+  <% if @statistician.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@statistician.errors.count, "error") %> prohibited this band from being saved:</h2>
+
+      <ul>
+      <% @statistician.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+  	<%= f.file_field :image_file%>
+  </div>
+  <br />
+  <br />
+  <div class="actions">
+    <%= submit_tag "Save" %>
+  </div>
+<% end %>
