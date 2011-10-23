@@ -278,4 +278,12 @@ class SurveysController < ApplicationController
       render :action => "section", :layout => "statistician"
     end
   end
+  
+  def css_style
+    @statistician = Statistician.find(params[:id])
+    
+    respond_to do |format|
+      format.css { render :css => "css_style", :content_type => "text/css", :layout => nil}
+    end
+  end
 end

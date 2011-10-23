@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Gather</title>
-  <link href="<%= "/stylesheets/statistician_#{@statistician.id.to_s}.css" %>" rel="stylesheet" type="text/css" />
+  <link href="<%= css_style_survey_path(@statistician,:css) %>" rel="stylesheet" type="text/css" />
   <%= stylesheet_link_tag 'jquery-ui-1.8.13.custom.css' %>
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tag %>

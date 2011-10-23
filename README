@@ -1,4 +1,4 @@
-------------------||Gather v0.2||-------------------
+------------------||Gather v0.3||-------------------
 Gather is a web based survey server.
 It allows for the creation, distribution, and
 data collection of surveys. The goal of the 
@@ -10,7 +10,7 @@ exactly to their needs.
 
 
 Gather is using rails v3.1.0 and has been tested with
-mysql. 
+mysql and ruby 1.8.7. 
 
 Check out the wiki for more information @: 
 https://github.com/ontehfritz/Gather/wiki

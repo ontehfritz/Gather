@@ -54,6 +54,11 @@ Gather::Application.routes.draw do
   match 'workbench/:id/list_results/:page' => 'workbench#list_results'
   match 'workbench/:section_id/view_survey/:subject_id' => 'workbench#view_survey'
   
+  resources :surveys do
+    member do
+      get 'css_style'
+    end
+  end
   #survey -------------------------------------------------------------------
   match 'surveys/:id/subject_authenticate/' => 'surveys#subject_authenticate'
   match 'surveys/:id/authenticate/' => 'surveys#authenticate'
@@ -64,6 +69,7 @@ Gather::Application.routes.draw do
   match 'surveys/:id/save/' => 'surveys#save'
   match 'surveys/:id/section/' => 'surveys#section'
   match 'surveys/:id/begin/' => 'surveys#begin'
+  #match 'surveys/:id/css_style' => 'surveys#css_style'
   #--------------------------------------------------------------------------#
   
   root :to => "workbench#index"
