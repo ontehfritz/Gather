@@ -39,4 +39,5 @@ class Statistician < ActiveRecord::Base
   
   has_many :sections, :dependent => :destroy
   has_many :user_completed_surveys, :dependent => :destroy
+  has_one :style
 end

@@ -17,14 +17,14 @@
 
 body
 {
-    background-color: #F0F0F0;
+    background-color: <%= @statistician.style.background %>;
     /*background-image:url(/Content/background.png);*/
     background-repeat:repeat-x;
     font-size: .75em;
     font-family: Verdana, Helvetica, Sans-Serif;
     margin: 0;
     padding: 0;
-    color: #696969;
+    color: <%= @statistician.style.font_color %>;
 }
 
 a:link

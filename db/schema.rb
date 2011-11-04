@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110819141339) do
+ActiveRecord::Schema.define(:version => 20111104134647) do
 
   create_table "elements", :force => true do |t|
     t.text     "element_text"
@@ -131,6 +131,15 @@ ActiveRecord::Schema.define(:version => 20110819141339) do
     t.string   "unlock_key"
     t.string   "slug"
     t.boolean  "active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "styles", :force => true do |t|
+    t.string   "background"
+    t.string   "question_font_color"
+    t.string   "font_color"
+    t.integer  "statistician_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

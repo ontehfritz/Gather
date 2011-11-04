@@ -44,9 +44,10 @@ class StatisticiansController < ApplicationController
     
     respond_to do |format|
       if @statistician.save
-        logger.debug "CSS PATH:#{Rails.root}/public/stylesheets/statistician.css"
-        File.copy("#{Rails.root}/public/stylesheets/statistician.css", 
-            "#{Rails.root}/public/stylesheets/statistician_#{@statistician.id.to_s}.css")
+        #logger.debug "CSS PATH:#{Rails.root}/public/stylesheets/statistician.css"
+        #File.copy("#{Rails.root}/public/stylesheets/statistician.css", 
+        #    "#{Rails.root}/public/stylesheets/statistician_#{@statistician.id.to_s}.css")
+        Style.create(:statistician_id => @statistician.id, :background => "#F0F0F0", :font_color => "#696969", :question_font_color => "#000000")
         format.html { redirect_to(edit_statistician_path(@statistician), :notice => 'Statistician was successfully created.') }
         format.xml  { render :xml => @statistician, :status => :created, :location => @statistician }
       else

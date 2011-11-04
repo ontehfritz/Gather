@@ -1,5 +1,7 @@
 Gather::Application.routes.draw do
   
+  resources :styles
+
   match 'question_images/:id/new' => 'question_images#new'
   resources :question_images
   devise_for :users
@@ -32,6 +34,7 @@ Gather::Application.routes.draw do
         post 'update_logo'
         post 'create_logo'
     end
+    resources :styles
     resources :sections 
   end
   

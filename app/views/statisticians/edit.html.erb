@@ -19,6 +19,13 @@ function showEditImage(id){
 	return false;
 }
 
+function showStyleDialog(){
+   $("#divId").dialog({ title: 'Edit Style' });
+   $("#divId").dialog("open");
+   $("#modalIframeId").attr("src","/statisticians/<%= @statistician.id %>/styles/<%= @statistician.style.id %>/edit");
+   return false;
+}
+
 $(document).ready(function() {
    $("#divId").dialog({
            autoOpen: false,
@@ -117,6 +124,12 @@ $(document).ready(function() {
 		    	<td colspan="2">
 		    		<%= image_tag("survey_pass_enabled.png", :border => 0)%>
 		    		<a href="" onclick="return showPwdDialog()">Password <% if @statistician.is_password_required == true %>  - enabled <% else %> - disabled <%end%></a>
+		    	</td>
+			</tr>
+			<tr>
+		    	<td colspan="2">
+		    		<%= image_tag("style.png", :border => 0)%>
+		    		<a href="" onclick="return showStyleDialog()">Style</a>
 		    	</td>
 			</tr>
 			<tr>
