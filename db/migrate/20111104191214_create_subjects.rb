@@ -1,5 +1,5 @@
 class CreateSubjects < ActiveRecord::Migration
-  def self.up
+  def change
     create_table :subjects do |t|
       t.string :identifier
       t.string :first_name, :limit => 512
@@ -8,12 +8,8 @@ class CreateSubjects < ActiveRecord::Migration
       t.string :email, :limit => 1026
       t.boolean :is_anonymous
       t.string :password, :limit => 1026
-
+      
       t.timestamps
     end
-  end
-
-  def self.down
-    drop_table :subjects
   end
 end

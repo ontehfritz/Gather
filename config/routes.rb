@@ -1,11 +1,16 @@
 Gather::Application.routes.draw do
   
+  resources :subjects do
+     member do
+        get 'close_dialog'
+    end
+  end
+
   resources :styles
 
   match 'question_images/:id/new' => 'question_images#new'
   resources :question_images
   devise_for :users
-  
   
   match 'skip_logics/:question_id/new/' => 'skip_logics#new'
   
