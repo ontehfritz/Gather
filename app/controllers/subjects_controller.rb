@@ -6,7 +6,7 @@ class SubjectsController < ApplicationController
   # GET /subjects
   # GET /subjects.json
   def index
-    @subjects = Subject.all
+    @subjects = Subject.where(:is_anonymous => :false)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -20,7 +20,7 @@ class SubjectsController < ApplicationController
     @subject = Subject.find(params[:id])
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render :layout => "dialog" }# show.html.erb
       format.json { render :json => @subject }
     end
   end
@@ -46,6 +46,8 @@ class SubjectsController < ApplicationController
   # POST /subjects.json
   def create
     @subject = Subject.new(params[:subject])
+    @subject.password = Base64.encode64(Digest::SHA1.digest("#{rand(1<<64)}/#{Time.now.to_f}/#{Process.pid}"))[0..7]
+    @subject.is_anonymous = false
 
     respond_to do |format|
       if @subject.save

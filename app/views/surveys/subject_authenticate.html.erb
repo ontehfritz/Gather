@@ -9,9 +9,7 @@ This: <%= session[:is_authenticated] %>
 
 <%= form_tag('subject_authenticate') %>
 <h1>This survey requires respondant verification</h1><br /><br />
-ID: <br />
-<%= text_field_tag 'subject_id' %><br />
-Password:<br />
+Access Code:<br />
 <%= password_field_tag 'pass' %>
 
 <div class="actions">

@@ -26,11 +26,16 @@
 	<%= f.label :email%><br />
 	<%= f.email_field :email %>
   </div>
-  
   <div >
-	<%= f.label :password, "Access Code"%><br />
-	<%= f.text_field :password %>
+	<%= f.label :identifier%><br />
+	<%= f.text_field :identifier%>
   </div>
+  <%if @subject.id != nil %>
+	  <div >
+		<%= f.label :password, "Access Code"%><br />
+		<%= f.text_field :password %>
+	  </div>
+  <% end %>
   
   <div class="actions">
     <%= f.submit %>

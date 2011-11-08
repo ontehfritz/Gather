@@ -30,6 +30,7 @@ $(document).ready(function() {
   <tr>
     <th>Name</th>
     <th>Email</th>
+    <th>Identifier</th>
     <th>Created</th>
     <th>Actions</th>
   </tr>
@@ -38,12 +39,13 @@ $(document).ready(function() {
   <tr>
   	<td><a href="" onclick="return showEditDialog(<%= subject.id %>);"><%= subject.full_name %></a></td>
   	<td><%= subject.email %></td>
+  	<td><%= subject.identifier %></td>
   	<td><%= subject.created_at %></td>
     <td><%= link_to image_tag("delete_survey.png", :border => 0), subject, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 <tr style="color:White; background-color:#77b108;">
-    <th colspan="4">&nbsp;</th>
+    <th colspan="5">&nbsp;</th>
 </tr>
 </table>
 

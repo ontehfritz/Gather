@@ -1,5 +1,29 @@
 <p id="notice"><%= notice %></p>
 
 
-<%= link_to 'Edit', edit_subject_path(@subject) %> |
-<%= link_to 'Back', subjects_path %>
+
+<p>
+  <b>First Name:</b>
+  <%= @subject.first_name %>
+</p>
+<p>
+  <b>Middle Name:</b>
+  <%= @subject.middle_name %>
+</p>
+
+<p>
+  <b>Last Name:</b>
+  <%= @subject.last_name %>
+</p>
+<p>
+  <b>Email:</b>
+  <%= @subject.email %>
+</p>
+<p>
+  <b>Access Code:</b>
+  <%= @subject.password %>
+</p>
+<p>
+	<b>Identifier:</b>
+	<%= @subject.identifier%>
+</p>

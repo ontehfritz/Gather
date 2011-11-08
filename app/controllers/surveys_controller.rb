@@ -61,11 +61,16 @@ class SurveysController < ApplicationController
           #format.html { render :action => "begin" }
           logger.debug new_subject.errors
         end
-      else
+      elsif @statistician.is_id_required == false
         redirect_to(:action => "information", :id => Section.find(:all, 
               :conditions => ["statistician_id = (?)", @statistician.id], :order => "sort_index").first.id)
         
         return
+      elsif @statistician.is_id_required == true && session[:is_authenticated] == true
+          session[:checksum] = Digest::MD5.hexdigest("#{session[:subject_id]}#{@statistician.id}")
+          redirect_to(:action => "section", :id => Section.find(:all, 
+              :conditions => ["statistician_id = (?)", @statistician.id], :order => "sort_index").first.id)
+          return
       end
     elsif params[:commit] == "No thanks"
       redirect_to(:action => "declined", :id => @statistician.id)
@@ -103,10 +108,11 @@ class SurveysController < ApplicationController
      
     if params[:commit] == "Continue"
       begin
-        @subject = Subject.find(params[:subject_id])
-        if @subject.password == params[:pass]
+        @subject = Subject.where(:password => params[:pass]).first
+        if !@subject.nil?
           session[:subject_id] = @subject.id
           session[:is_authenticated] = true
+          #session[:checksum] = Digest::MD5.hexdigest("#{@subject.id}#{@statistician.id}")
           redirect_to(:action => "begin", :id => @statistician.id)
           return
         else
