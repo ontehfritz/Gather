@@ -122,6 +122,11 @@ class QuestionsController < ApplicationController
     
     respond_to do |format|
       if @question.update_attributes(params[:question])
+        @order = params[:sort_order]
+        @order.split(',').each_with_index do |element, i|
+            Element.update(element, :sort_index => i+1)
+        end
+        
         format.html { redirect_to(edit_question_path(@question), :notice => 'Question was successfully Updated.') }
         format.xml  { head :ok }
       else
