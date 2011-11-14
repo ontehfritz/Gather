@@ -1,3 +1,4 @@
+require 'csv'
 class WorkbenchController < ApplicationController
   before_filter :authenticate_user!#, :except => [:some_action_without_auth]
   
@@ -85,7 +86,7 @@ class WorkbenchController < ApplicationController
        end
     end
     
-    csv_string = FasterCSV.generate do |csv| 
+    csv_string = CSV.generate do |csv| 
         csv << @headers
         #row = Array.new
         @responses.each do |r|

@@ -1,4 +1,3 @@
-require 'ftools'
 class StatisticiansController < ApplicationController
   before_filter :authenticate_user!, :except => [:show_logo]  
   

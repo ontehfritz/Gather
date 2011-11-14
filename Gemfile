@@ -6,7 +6,6 @@ gem 'rails', '3.1.0'
 # gem 'rails',     :git => 'git://github.com/rails/rails.git'
 gem 'therubyracer'
 gem 'json'
-gem 'fastercsv'
 gem 'will_paginate'
 
 # Gems used only for assets and not required
