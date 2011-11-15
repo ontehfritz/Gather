@@ -1,5 +1,4 @@
-<%= form_for(@question.becomes(Question)) do |f| %>
-<%= @question.types = @question_type %> 
+<%= form_for(@question) do |f| %>
 <div id="debug" style="display:none">
 <%= @question.is_sub.to_s %>
 <%= request.path %>
@@ -28,7 +27,7 @@
 	 	<%= select_tag "trigger_answer", options_from_collection_for_select(@parent_question.elements,"id", "element_text",@trigger_answer == nil ? "" : @trigger_answer.element_id.to_s ), {:include_blank => true}  %>
 	  </div>
   <% end %>
-  <%= render :partial => "new" + @question.types.downcase, :locals=>{:f=>f} %>
+  <%= render :partial => "new" + @question.class.name.downcase, :locals=>{:f=>f} %>
   
   <div class="actions" style="clear:both">
     <%= submit_tag "Save" %>

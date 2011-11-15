@@ -1,11 +1,20 @@
 class Question < ActiveRecord::Base
-  validates_presence_of :question_text
+  validates :question_text, :presence => true 
   
   def types  
     self.type 
   end 
   def types=(type)   
     self.type = type
+  end
+  
+  def self.inherited(child)
+    child.instance_eval do
+      def model_name
+        Question.model_name
+      end
+    end
+    super
   end
   
   belongs_to :section

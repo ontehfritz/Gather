@@ -22,7 +22,7 @@ class QuestionsController < ApplicationController
   end
 
   def new
-    @question = Question.new
+    @question = params[:types].constantize.new
     if params[:sub] == "new"
       @parent_question = Question.find(params[:id])
       #@parent_question_id =  @parent_question.id
@@ -32,9 +32,6 @@ class QuestionsController < ApplicationController
       @question.section_id = params[:id]
       @question.is_sub = false
     end
-    
-    @question.types = params[:types]
-    @question_type = @question.types.to_s
   end
 
   def edit
@@ -122,11 +119,6 @@ class QuestionsController < ApplicationController
     
     respond_to do |format|
       if @question.update_attributes(params[:question])
-        @order = params[:sort_order]
-        @order.split(',').each_with_index do |element, i|
-            Element.update(element, :sort_index => i+1)
-        end
-        
         format.html { redirect_to(edit_question_path(@question), :notice => 'Question was successfully Updated.') }
         format.xml  { head :ok }
       else
