@@ -1,12 +1,12 @@
 class Question < ActiveRecord::Base
   validates :question_text, :presence => true 
   
-  def types  
-    self.type 
-  end 
-  def types=(type)   
-    self.type = type
-  end
+  # def types  
+    # self.type 
+  # end 
+  # def types=(type)   
+    # self.type = type
+  # end
   
   def self.inherited(child)
     child.instance_eval do

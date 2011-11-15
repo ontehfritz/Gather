@@ -22,7 +22,7 @@ class QuestionsController < ApplicationController
   end
 
   def new
-    @question = params[:types].constantize.new
+    @question = params[:type].constantize.new
     if params[:sub] == "new"
       @parent_question = Question.find(params[:id])
       #@parent_question_id =  @parent_question.id
@@ -36,7 +36,6 @@ class QuestionsController < ApplicationController
 
   def edit
     @question = Question.find(params[:id])
-    @question_type = @question.types.to_s
     @question_image = QuestionImage.where(:question_id => params[:id]).first
     
     if @question.is_sub == true
@@ -47,11 +46,11 @@ class QuestionsController < ApplicationController
   end
 
   def create
-    @question = Question.new(params[:question])
+    @question = params[:question][:type].constantize.new(params[:question])
        
     if params[:commit] == "Save"
-      @question_new = @question.types.constantize.new(params[:question])
-      @question_new.question_type_id = QuestionType.find(:all,:conditions => {:type_name => @question_new.types}).first.id
+      @question_new = @question.type.constantize.new(params[:question])
+      @question_new.question_type_id = QuestionType.find(:all,:conditions => {:type_name => @question_new.type}).first.id
       
       if @question.is_sub
         subs = Question.where(:id => params[:parent_question_id]).first.sub_questions
@@ -101,10 +100,10 @@ class QuestionsController < ApplicationController
     elsif params[:commit] == "Cancel" || params[:commit] == "Done"
       redirect_to(:action => "index", :section_id => @question.section_id)
     elsif @question.is_sub
-      redirect_to(:action => "new",:id => params[:parent_question_id],:types => @question.types, :sub => "new")
+      redirect_to(:action => "new",:id => params[:parent_question_id],:type => @question.class.name, :sub => "new")
       return
     else
-      redirect_to(:action => "new", :id => @question.section_id, :types => @question.types)
+      redirect_to(:action => "new", :id => @question.section_id, :type => @question.class.name)
       return
     end
   end

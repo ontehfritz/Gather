@@ -18,7 +18,7 @@ Gather::Application.routes.draw do
   match 'users/index' => 'users#index'
   match 'users/close_dialog' => 'users#close_dialog'
   
-  match 'section/:id/questions/:types/new' => 'questions#new'
+  match 'section/:id/questions/:type/new' => 'questions#new'
   match 'sections/close_dialog' => 'sections#close_dialog'
   resources :sections do
     member do

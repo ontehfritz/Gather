@@ -5,7 +5,7 @@
 <%= form_tag() %>
 <% @section.questions.each do |q|%>	
 	<% if q.is_sub == false %>
-		<%= render :partial => "questions/" + q.types.downcase, :locals=>{:question=>q} %> 
+		<%= render :partial => "questions/" + q.class.name.downcase, :locals=>{:question=>q} %> 
 		<% subs = q.sub_questions %>
 		<% sub_questions = Array.new %>
 		<% subs.each do |s|%>
@@ -39,7 +39,7 @@
 			<% sub_questions.each do |s|%>
 				<li>
 				<div id="branch_<%= s.id %>" <%if s.is_hidden == true%> style="display:none" <% end %> class="branch" >
-					<%= render :partial => "questions/" + s.types.downcase, :locals=>{:question=>s} %> 
+					<%= render :partial => "questions/" + s.class.name.downcase, :locals=>{:question=>s} %> 
 				</div>
 				</li>
 			<% end %>

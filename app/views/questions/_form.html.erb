@@ -18,7 +18,7 @@
   <%= f.hidden_field :is_sub %>
   <div>
 	Select a question type:<br />
-  	<%= select("question", "types", QuestionType.all.collect {|t| [ t.type_name, t.type_name ] }) %>
+  	<%= select("question", "type", QuestionType.all.collect {|t| [ t.type_name, t.type_name ] }) %>
   </div>
   <%if @parent_question != nil%>
 	  <%= hidden_field_tag("parent_question_id", @parent_question.id) %>

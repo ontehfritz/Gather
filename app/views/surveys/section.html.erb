@@ -17,7 +17,7 @@ check sum: <%= session[:checksum] %><
 <%= form_tag('save') %>
 <% @section.questions.each do |q|%>	
 	<% if q.is_sub == false %>
-		<%= render :partial => "questions/" + q.types.downcase, :locals=>{:question=>q} %> 
+		<%= render :partial => "questions/" + q.class.name.downcase, :locals=>{:question=>q} %> 
 		<% subs = q.sub_questions %>
 		<% sub_questions = Array.new %>
 		<% subs.each do |s|%>
