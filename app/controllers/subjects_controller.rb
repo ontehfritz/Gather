@@ -47,6 +47,9 @@ class SubjectsController < ApplicationController
   def create
     @subject = Subject.new(params[:subject])
     @subject.password = Base64.encode64(Digest::SHA1.digest("#{rand(1<<64)}/#{Time.now.to_f}/#{Process.pid}"))[0..7]
+    if @subject.identifier == nil || @subject.identifier == ""
+      @subject.identifier = Base64.encode64(Digest::SHA1.digest("#{rand(1<<64)}/#{Time.now.to_f}/#{Process.pid}"))[0..7]
+    end
     @subject.is_anonymous = false
 
     respond_to do |format|
