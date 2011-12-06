@@ -51,7 +51,8 @@ class SurveysController < ApplicationController
       if @statistician.is_anonymous == true
         #logger.debug "anonymous"
         new_subject = Subject.new(:first_name => "Anonymous", :is_anonymous => true, :email => "Anonymous")
-        if new_subject.save
+        
+        if new_subject.save(:validate => false)
           session[:subject_id] = new_subject.id
           session[:checksum] = Digest::MD5.hexdigest("#{new_subject.id}#{@statistician.id}")
           redirect_to(:action => "section", :id => Section.find(:all, 
@@ -83,7 +84,11 @@ class SurveysController < ApplicationController
     section = Section.find(params[:id])
     @statistician = section.statistician
     if params[:commit] == "Continue"
-      @new_subject = Subject.new(params[:subject])
+      @new_subject = Subject.new(params[:subject]) 
+      @new_subject.password = Base64.encode64(Digest::SHA1.digest("#{rand(1<<64)}/#{Time.now.to_f}/#{Process.pid}"))[0..7]
+      @new_subject.identifier = Base64.encode64(Digest::SHA1.digest("#{rand(1<<64)}/#{Time.now.to_f}/#{Process.pid}"))[0..7]
+      @new_subject.is_anonymous = false
+      
       if @new_subject.save
         session[:subject_id] = @new_subject.id
         session[:checksum] = Digest::MD5.hexdigest("#{@new_subject.id}#{section.statistician.id}")
