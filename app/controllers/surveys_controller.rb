@@ -36,12 +36,16 @@ class SurveysController < ApplicationController
       session[:is_authenticated] = false
     end
     
+    if session[:is_subject_authenticated] == nil
+      session[:is_subject_authenticated] = false
+    end
+    
     if @statistician.is_password_required == true  && session[:is_authenticated] == false
        redirect_to(:action => "authenticate", :id => @statistician.id)
        return
     end
     
-    if @statistician.is_id_required == true && session[:is_authenticated] == false
+    if @statistician.is_id_required == true && session[:is_subject_authenticated] == false
        redirect_to(:action => "subject_authenticate", :id => @statistician.id)
        return
     end
@@ -116,13 +120,13 @@ class SurveysController < ApplicationController
         @subject = Subject.where(:password => params[:pass]).first
         if !@subject.nil?
           session[:subject_id] = @subject.id
-          session[:is_authenticated] = true
+          session[:is_subject_authenticated] = true
           #session[:checksum] = Digest::MD5.hexdigest("#{@subject.id}#{@statistician.id}")
           redirect_to(:action => "begin", :id => @statistician.id)
           return
         else
           @error = true
-          session[:is_authenticated] = false
+          session[:is_subject_authenticated] = false
         end
       rescue
         @error = true
