@@ -10,13 +10,14 @@ exactly to their needs.
 
 
 Gather is using rails v3.1.0 and has been tested with
-mysql and ruby 1.8.7. 
+mysql and ruby 1.9.2 
 
 Check out the wiki for more information @: 
 https://github.com/ontehfritz/Gather/wiki
 
-Also check out my personal website @:
-http://www.theshizit.com/
+http://gather.theshizit.com/
+user: admin@gather.here
+pass: password123
 A demo of the latest version will always be around to 
 play with. Trying to break it is essential, as long as
 you report bugs found. 
