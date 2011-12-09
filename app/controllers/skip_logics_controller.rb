@@ -10,12 +10,13 @@ class SkipLogicsController < ApplicationController
   
   def create
       @skip_logic = SkipLogic.new(params[:skip_logic])
+      
       respond_to do |format|
       if @skip_logic.save
          format.html { redirect_to(:controller => "skip_logics", :action => "index",:question_id => @skip_logic.question_id) }
          format.xml  { render :xml => @skip_logic, :status => :created, :location => @skip_logic }
       else
-          format.html { render :action => "new" }
+          format.html { render :action => "new",:layout => "dialog" }
           format.xml  { render :xml => @skip_logic.errors, :status => :unprocessable_entity }
        end
      end
@@ -34,7 +35,7 @@ class SkipLogicsController < ApplicationController
         format.html { redirect_to(:controller => "skip_logics", :action => "index",:question_id => @skip_logic.question_id, :notice => 'Skip Logic was successfully created.')}
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
+        format.html { render :action => "edit" , :layout => "dialog"}
         format.xml  { render :xml => @skip_logic.errors, :status => :unprocessable_entity }
       end
     end

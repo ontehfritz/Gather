@@ -1,4 +1,4 @@
-<%= form_for [@element.question.becomes(Question),@element] do |f| %>
+<%= form_for [@element.question,@element] do |f| %>
   <% if @element.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@element.errors.count, "error") %> prohibited this question from being saved:</h2>
@@ -11,14 +11,14 @@
   <% end %>
   <%= f.hidden_field :question_id %>
   <div class="field">
-	<%if @question_type == "Likert"%>Question Text<%else%><%= f.label :element_text, "Answer" %><%end%><br />
+	<%if @element.question.class.name == "Likert"%>Question Text<%else%><%= f.label :element_text, "Answer" %><%end%><br />
     <%= f.text_field :element_text%>
   </div>
-  <%=  @question_type %>
-  <%if @question_type == "Likert"%>
+  
+  <%if @element.question.class.name == "Likert"%>
   Score (Ascending 1,2,3... or Descending 3, 2, 1....)<br />
   <%= select( "element", "score", { "Ascending" => "0", "Descending" => "-1"}) %>
-  <%elsif @question_type  != "Scale"%>
+  <%elsif @element.question.class.name != "Scale"%>
   <div class="field">
     <%= f.label :score %><br />
     <%= f.text_field :score, :value => "0"%>
@@ -28,6 +28,5 @@
   <br />
   <div class="actions" style="clear:both">
     <%= submit_tag "Save" %>
-	<%= submit_tag "Cancel" %>
   </div>
 <% end %>

@@ -3,7 +3,6 @@ class ElementsController < ApplicationController
   def new  
     @element = Element.new
     @element.question_id = params[:question_id];
-    @question_type = Question.find( @element.question_id).types.to_s
     
     render :layout => "dialog"
   end
@@ -58,7 +57,6 @@ class ElementsController < ApplicationController
   
   def edit
     @element = Element.find(params[:id])
-    @question_type = @element.question.types.to_s
     render :layout => "dialog"
   end
 

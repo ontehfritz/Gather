@@ -109,7 +109,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    @question = Question.find(params[:id]).becomes(Question)
+    @question = Question.find(params[:id])
     
     if params[:commit] == "Cancel" || params[:commit] == "Done"
       redirect_to(:action => "index", :section_id => @question.section_id)
@@ -118,6 +118,13 @@ class QuestionsController < ApplicationController
     
     respond_to do |format|
       if @question.update_attributes(params[:question])
+        @order = params[:sort_order]
+        if @order != nil
+          @order.split(',').each_with_index do |element, i|
+              Element.update(element, :sort_index => i+1)
+          end
+        end
+        
         format.html { redirect_to(edit_question_path(@question), :notice => 'Question was successfully Updated.') }
         format.xml  { head :ok }
       else

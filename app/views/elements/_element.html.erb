@@ -1,9 +1,9 @@
 <tr id="<%= element.id %>">
   <td><span class="ui-icon ui-icon-arrowthick-2-n-s"></span></td>
   <td><%= element.element_text %></td>
-  <%if element.question.types == "Likert"%>
+  <%if element.question.class.name == "Likert"%>
   <td><%if element.score == -1%>Descending<%else%>Ascending<%end%></td>
-  <%elsif element.question.types != "Scale"%>
+  <%elsif element.question.class.name != "Scale"%>
   <td><%= element.score %></td>
   <%end%> 
   <td><a href="" onclick="return showEditDialog(<%= element.id %>)"><%= image_tag("edit.png", :border => 0) %></a>
