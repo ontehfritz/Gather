@@ -1,0 +1,5 @@
+<% content_for :survey_title, @statistician.name %>
+<div>
+	Survey was already completed by you on: <br />
+	<%= @complete.created_at.to_s %>
+</div>

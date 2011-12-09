@@ -5,6 +5,13 @@ class SurveysController < ApplicationController
     render :layout => "statistician"
   end
   
+  def completed
+    @statistician = Statistician.find(params[:id])
+    @complete = UserCompletedSurvey.find_by_subject_id_and_statistician_id(session[:subject_id],@statistician.id)
+    reset_session
+    render :layout => "statistician"
+  end
+  
   def power
     @statistician = Statistician.find(params[:id])
     reset_session 
@@ -71,7 +78,11 @@ class SurveysController < ApplicationController
               :conditions => ["statistician_id = (?)", @statistician.id], :order => "sort_index").first.id)
         
         return
-      elsif @statistician.is_id_required == true && session[:is_authenticated] == true
+      elsif @statistician.is_id_required == true && session[:is_subject_authenticated] == true
+          if UserCompletedSurvey.find_by_subject_id_and_statistician_id(session[:subject_id],@statistician.id) != nil
+             redirect_to(:action => "completed", :id => @statistician.id)
+          return
+          end
           session[:checksum] = Digest::MD5.hexdigest("#{session[:subject_id]}#{@statistician.id}")
           redirect_to(:action => "section", :id => Section.find(:all, 
               :conditions => ["statistician_id = (?)", @statistician.id], :order => "sort_index").first.id)

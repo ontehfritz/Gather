@@ -77,6 +77,7 @@ Gather::Application.routes.draw do
   match 'surveys/:id/save/' => 'surveys#save'
   match 'surveys/:id/section/' => 'surveys#section'
   match 'surveys/:id/begin/' => 'surveys#begin'
+  match 'surveys/:id/completed/' => 'surveys#completed'
   #match 'surveys/:id/css_style' => 'surveys#css_style'
   #--------------------------------------------------------------------------#
   
