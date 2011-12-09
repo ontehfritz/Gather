@@ -12,9 +12,9 @@ class QuestionImagesController < ApplicationController
     @question_image = QuestionImage.find(params[:id])
 
     @image = @question_image.image_data
-    send_data (@image, :type     => @question_image.content_type, 
+    send_data @image, :type     => @question_image.content_type, 
                      :filename => @question_image.file_name, 
-                     :disposition => 'inline')
+                     :disposition => 'inline'
     #respond_to do |format|
     #  format.html # show.html.erb
     #  format.xml  { render :xml => @question_image }
