@@ -5,7 +5,7 @@ class SectionsController < ApplicationController
   def save_sort
     @section = Section.find(params[:section_id])
     if params[:commit] == "Add Question"
-      redirect_to(:controller => "questions", :action => "new", :id => params[:section_id], :types => "FreeForm")
+      redirect_to(:controller => "questions", :action => "new", :id => params[:section_id], :type => "FreeForm")
       return
     elsif params[:commit] == "Done"
       #@section = Section.find(params[:section_id])
