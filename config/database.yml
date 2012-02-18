@@ -17,7 +17,7 @@ test:
   encoding: utf8
   database: gatherdb_test
   username: root
-  password: 
+  password:
   pool: 5
 
 production:

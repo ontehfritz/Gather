@@ -240,10 +240,8 @@ class SurveysController < ApplicationController
     render :layout => "statistician"
   end
   
-  #this method saves information and entered by the respondent
+  #this method saves information entered by the respondent
   #also it deterimines the paths the survey will take with skip logic
-  #very messy and very confusing, will do incremental cleanups on the 
-  #logic
   def save
     #once again check if we have a subject active or session hasn't expired
     if session[:subject_id] == nil
@@ -263,36 +261,21 @@ class SurveysController < ApplicationController
     Response.clear_section_responses(session[:subject_id], @section)
     
     answered = Array.new
-    
-    if params[:questions] != nil #one or more questions have been answered
-      #loop through each question
-      params[:questions].values.each do |q|
-        
-        if eval(q[:type]).save_response(q,session[:subject_id])
-          answered.push q[:question]
-        end
-   
-      end
-    end
-    
     @errors = false
-    #logger.debug "answered: #{answered.inspect}"
-    
-    @section.questions.each do |q|
-      if q.is_answer_required == true
-        required_error = true
-      else
-        required_error = false
-      end
-      answered.each do |a|
-        if q.id.to_s == a
-          #logger.debug "match found"
-          required_error = false
+     
+    if params[:questions] != nil #one or more questions have been answered
+      # loop through each question
+      params[:questions].values.each do |q|
+        # eval the type calling that save_response method defined on the model object 
+        # The save_response method will return a bool if the 
+        # respondant successfully has answered the question
+        if !eval(q[:type]).save_response(q,session[:subject_id])
+          is_q = @section.questions.select {|q1| q1.id.to_s == q[:question]}.first
+          if is_q.is_answer_required
+            @errors = true
+            is_q.errors.add(:is_answer_required, "Required")
+          end
         end
-      end
-      if required_error == true 
-        @errors = true
-        q.errors.add(:is_answer_required, "Required")
       end
     end
     
