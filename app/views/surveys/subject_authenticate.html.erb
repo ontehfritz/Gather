@@ -1,11 +1,4 @@
 <% content_for :survey_title, @statistician.name %>
-
-<% if @error == true %>
-<div id="validation_errors">
-	Password and/or Respondant ID is incorrect. Please try agian.
-</div>
-<%end%>
-
 <%= form_tag('subject_authenticate') %>
 <h1>This survey requires respondant verification</h1><br /><br />
 Access Code:<br />

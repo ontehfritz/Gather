@@ -1,10 +1,14 @@
 class SurveysController < ApplicationController
+  #Respondent declines to fill out survey 
   def declined
     @statistician = Statistician.find(params[:id])
-    reset_session
+    reset_session #kill the current session
     render :layout => "statistician"
   end
   
+  #Respondent has completed the survey, Get completed survey information
+  #If using a subject logon, this will alert the subject they already filled
+  #out the survey
   def completed
     @statistician = Statistician.find(params[:id])
     @complete = UserCompletedSurvey.find_by_subject_id_and_statistician_id(session[:subject_id],@statistician.id)
@@ -12,59 +16,94 @@ class SurveysController < ApplicationController
     render :layout => "statistician"
   end
   
+  #If the survey has not been turned get redirected here
   def power
     @statistician = Statistician.find(params[:id])
     reset_session 
     render :layout => "statistician"
   end 
   
+  #once survey is complete this method is executed
   def finish
+    #check if the session is still valid or the survey is beening accessed correcty
+    #this session variable must be valid throughout each step of the survey
     if session[:subject_id] == nil
       raise "Your session has expired or an error has occured"
     end
     
     @statistician = Statistician.find(params[:id])
-    completed = UserCompletedSurvey.new(:subject_id => session[:subject_id], 
-                                                    :statistician_id => @statistician.id)
-    completed.save
+    #record completion of survey, if this does not occur survey will not be recognized as 
+    #complete
+    completed = 
+          UserCompletedSurvey.new(:subject_id => session[:subject_id], 
+                                                :statistician_id => @statistician.id)
     
-    UserSkip.delete_all(["subject_id = ? and statistician_id = ?", session[:subject_id], @statistician.id])
-    reset_session
-    render :layout => "statistician"
+    respond_to do |format|                                     
+      if completed.save
+        #delete any skip logic information for this repondant, if any. This is only needed if survey is 
+        #still being used
+        UserSkip.delete_all(["subject_id = ? and statistician_id = ?", 
+                                          session[:subject_id], @statistician.id])
+        reset_session
+        format.html { render :layout => "statistician" }
+      else
+        format.html { render :layout => "statistician" }
+      end
+    end
   end
   
+  #before survey begins display disclamer/introduction to survey
+  #also perform a number of checks if any other action needs to 
+  #be taken such as authentication, subject check etc ...
   def begin
     @statistician = Statistician.find(params[:id])
+    
+    #if the survey is not turned on, redirect to power
+    #action notfiying the respondent that the survey
+    #needs to be turned on.
     if @statistician.power != true
       redirect_to(:action => "power", :id => @statistician.id)
       return
     end
+    
+    #intialize session if not intialized
+    #this is used for password protected surveys
     if session[:is_authenticated] == nil
       session[:is_authenticated] = false
     end
     
+    #intialize session if not intialized
+    #this is used when a survey requires a subject to login
     if session[:is_subject_authenticated] == nil
       session[:is_subject_authenticated] = false
     end
     
+    #if survey is password protected and have not authenticated
+    #redirect to authentication page
     if @statistician.is_password_required == true  && session[:is_authenticated] == false
        redirect_to(:action => "authenticate", :id => @statistician.id)
        return
     end
-    
+    #redirect to subject authentication if survey has enabled it
     if @statistician.is_id_required == true && session[:is_subject_authenticated] == false
        redirect_to(:action => "subject_authenticate", :id => @statistician.id)
        return
     end
     
+    #did respondent click agree
     if params[:commit] == "Agree"
       #logger.debug "commited"
+      
+      #if the survey is anonymous make an entry into the subject table
       if @statistician.is_anonymous == true
         #logger.debug "anonymous"
         new_subject = Subject.new(:first_name => "Anonymous", :is_anonymous => true, :email => "Anonymous")
         
+        #skip validation
         if new_subject.save(:validate => false)
           session[:subject_id] = new_subject.id
+          #this is used so users cannot jump to other surveys after authentication
+          #if the checksum fails then they are messing around between surveys
           session[:checksum] = Digest::MD5.hexdigest("#{new_subject.id}#{@statistician.id}")
           redirect_to(:action => "section", :id => Section.find(:all, 
               :conditions => ["statistician_id = (?)", @statistician.id], :order => "sort_index").first.id)
@@ -73,21 +112,26 @@ class SurveysController < ApplicationController
           #format.html { render :action => "begin" }
           logger.debug new_subject.errors
         end
+      #if the survey is not anonymous collect user information
       elsif @statistician.is_id_required == false
         redirect_to(:action => "information", :id => Section.find(:all, 
               :conditions => ["statistician_id = (?)", @statistician.id], :order => "sort_index").first.id)
         
         return
+      #if subject login is required and the subject authenticated check if subject
+      #has already completed this survey
       elsif @statistician.is_id_required == true && session[:is_subject_authenticated] == true
           if UserCompletedSurvey.find_by_subject_id_and_statistician_id(session[:subject_id],@statistician.id) != nil
              redirect_to(:action => "completed", :id => @statistician.id)
-          return
+             return
           end
+          #create the checksum 
           session[:checksum] = Digest::MD5.hexdigest("#{session[:subject_id]}#{@statistician.id}")
           redirect_to(:action => "section", :id => Section.find(:all, 
               :conditions => ["statistician_id = (?)", @statistician.id], :order => "sort_index").first.id)
           return
       end
+    #if the user has declined redirect to declined page
     elsif params[:commit] == "No thanks"
       redirect_to(:action => "declined", :id => @statistician.id)
       return
@@ -95,9 +139,14 @@ class SurveysController < ApplicationController
     render :layout => "statistician"
   end
   
+  #if the survey is not anonymous respondents have
+  #to fill in their informations
   def information
     section = Section.find(params[:id])
     @statistician = section.statistician
+    
+    #if the respondent continues, enter the information as a subject
+    #this can be later used to have this respondant return
     if params[:commit] == "Continue"
       @new_subject = Subject.new(params[:subject]) 
       @new_subject.password = Base64.encode64(Digest::SHA1.digest("#{rand(1<<64)}/#{Time.now.to_f}/#{Process.pid}"))[0..7]
@@ -109,10 +158,11 @@ class SurveysController < ApplicationController
         session[:checksum] = Digest::MD5.hexdigest("#{@new_subject.id}#{section.statistician.id}")
         redirect_to(:action => "section", :id => params[:id])
         return
-      else
+      else #tsk tsk make better
         render :layout => "statistician"
         return
       end
+    #if respondant cancels redirect to the beginning of the survey
     elsif params[:commit] == "Cancel"
       #section = Section.find(params[:id])
       redirect_to(:action => "begin", :id => section.statistician.id)
@@ -122,25 +172,28 @@ class SurveysController < ApplicationController
     render :layout => "statistician"
   end
   
+  #used to authenticate subjects
   def subject_authenticate
-    @error = false
     @statistician = Statistician.find(params[:id])
      
     if params[:commit] == "Continue"
       begin
+        #simply authentication, passcode per subject
+        #key must be unique. If stronger authentication is 
+        #needed this will have to change. For lab scenerios and studies
+        #this should be fine.
         @subject = Subject.where(:password => params[:pass]).first
         if !@subject.nil?
           session[:subject_id] = @subject.id
           session[:is_subject_authenticated] = true
-          #session[:checksum] = Digest::MD5.hexdigest("#{@subject.id}#{@statistician.id}")
           redirect_to(:action => "begin", :id => @statistician.id)
           return
         else
-          @error = true
+          flash[:notice] = "Password and/or Respondant ID is incorrect. Please try agian.";
           session[:is_subject_authenticated] = false
         end
       rescue
-        @error = true
+        flash[:notice] = "Error has occured";
         session[:is_authenticated] = false
       end
     end
@@ -148,8 +201,9 @@ class SurveysController < ApplicationController
     render :layout => "statistician"
   end
   
+  #This is for survey authentication 
+  #Very simple passcode is used. 
   def authenticate
-    @error = false
     @statistician = Statistician.find(params[:id])
      
     if params[:commit] == "Continue"
@@ -158,7 +212,7 @@ class SurveysController < ApplicationController
         redirect_to(:action => "begin", :id => @statistician.id)
         return
       else
-        @error = true
+        flash[:notice] = "Passcode is not valid for this survey";
         session[:is_authenticated] = false
       end
     end
@@ -166,13 +220,18 @@ class SurveysController < ApplicationController
     render :layout => "statistician"
   end
   
+  #this renders a section of the survey
   def section
+    #make sure a anonymous respondent or subject is active before continuing
     if session[:subject_id] == nil
       raise "Your session has expired or an error has occured"
     end
+    
     @section = Section.find(params[:id])
     @statistician = @section.statistician
     
+    #check if this is a valid session 
+    #meaning you are authorized and are not trying to bypass authenication on other surveys
     if session[:checksum] == nil || 
           session[:checksum] != Digest::MD5.hexdigest("#{session[:subject_id]}#{@section.statistician_id}")
       raise "Your session has expired or an error has occured"
@@ -181,7 +240,12 @@ class SurveysController < ApplicationController
     render :layout => "statistician"
   end
   
+  #this method saves information and entered by the respondent
+  #also it deterimines the paths the survey will take with skip logic
+  #very messy and very confusing, will do incremental cleanups on the 
+  #logic
   def save
+    #once again check if we have a subject active or session hasn't expired
     if session[:subject_id] == nil
       raise "Your session has expired or an error has occured"
     end
@@ -189,79 +253,30 @@ class SurveysController < ApplicationController
     @section = Section.find(params[:id])
     @statistician = @section.statistician
     @sections = Section.find(:all, :conditions => ["statistician_id = (?)", @section.statistician_id], :order => "sort_index")
+    #skip logic determines which page will be displayed next
+    #retrieve all the skip logics
     @skips = SkipLogic.where("question_id in (?)", @section.questions.map {|q| q.id})
     
-    @section.questions.each do |q|
-      UserSkip.delete_all(["subject_id = ? and question_id = ?", session[:subject_id], q.id])
-    end
+    #delete any skip logic triggered for current section
+    UserSkip.clear_section(session[:subject_id], @section)
+    #clear the responses for new answers
+    Response.clear_section_responses(session[:subject_id], @section)
+    
     answered = Array.new
-    Response.delete_all(["subject_id = ? and question_id in (?)", session[:subject_id], @section.questions.map {|q| q.id}])
-    #This saving response code works well and is reliable. However the rigidness of the code 
-    #is a pile shit. Look at it! who wants to maintain this, not me! This design needs to change and will change next release
-    #thinking different response types with overwritten save methods
-    if params[:questions] != nil
+    
+    if params[:questions] != nil #one or more questions have been answered
+      #loop through each question
       params[:questions].values.each do |q|
-        if q[:multiple_answer] == "true"
-          if q[:additional_text] != nil and q[:additional_text] != "" 
-            response = Response.new(:question_id => q[:question], 
-                    :answer_text => q[:additional_text], :subject_id => session[:subject_id])
-                    
-            response.save
-          end
-          flag_answered = false 
-          if q[:answer_id] != nil
-              q[:answer_id].values.each do |a|
-              if a[:id] == nil and a[:answer] != ""
-                response = Response.new(:question_id => q[:question], 
-                  :answer_text => a[:answer], :subject_id => session[:subject_id], :element_id => a[:id])
-                response.save 
-              elsif a[:id] != nil
-                if (q[:type] == "Scale" && a[:answer] != nil) || (q[:type] == "Likert" && a[:answer] != nil)
-                  response = Response.new(:question_id => q[:question], 
-                    :answer_text => a[:answer], :subject_id => session[:subject_id], :element_id => a[:id])
-                  flag_answered = true
-                  response.save
-                elsif q[:type] == "MultipleChoiceCheckbox"
-                  response = Response.new(:question_id => q[:question], 
-                    :answer_text => a[:answer], :subject_id => session[:subject_id], :element_id => a[:id])
-                  flag_answered = true
-                  response.save
-                end
-              end
-            end   
-          end
-          if flag_answered == true
-            answered.push q[:question]  
-          end  
-        else
-           @skips.each do |skip|
-                if skip.types == "Skip" && q[:question] == skip.question_id.to_s && q[:answer_id] == skip.element_id.to_s
-                  user_skip = UserSkip.new(:subject_id => session[:subject_id],:question_id => skip.question_id, 
-                    :section_id => skip.section_id, :statistician_id => @section.statistician_id)
-                  user_skip.save
-                end
-              end
-              
-          if q[:additional_text] != nil and q[:additional_text] != "" 
-            response = Response.new(:question_id => q[:question], 
-                    :answer_text => q[:additional_text], :subject_id => session[:subject_id])
-                    
-            response.save
-          end
-          
-          response = Response.new(:question_id => q[:question], 
-            :answer_text => q[:answer] == "" ? nil : q[:answer], :subject_id => session[:subject_id], :element_id => q[:answer_id])
-          if (q[:answer_id] != "" && q[:answer_id] != nil) || (q[:answer] != nil && q[:answer] != "")
-            answered.push q[:question]
-            response.save
-          end
+        
+        if eval(q[:type]).save_response(q,session[:subject_id])
+          answered.push q[:question]
         end
+   
       end
     end
-    #end of shit that needs to be changed
     
     @errors = false
-    logger.debug "answered: #{answered.inspect}"
+    #logger.debug "answered: #{answered.inspect}"
     
     @section.questions.each do |q|
       if q.is_answer_required == true
