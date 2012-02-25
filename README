@@ -15,12 +15,11 @@ mysql and ruby 1.9.2
 Check out the wiki for more information @: 
 https://github.com/ontehfritz/Gather/wiki
 
-http://gather.theshizit.com/
+Demo and test site:
+http://www.gathersurvey.tk/
 user: admin@gather.here
 pass: password123
-A demo of the latest version will always be around to 
-play with. Trying to break it is essential, as long as
-you report bugs found. 
+
 
 Report bugs and feature requests @:
 https://github.com/ontehfritz/Gather/
