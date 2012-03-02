@@ -80,7 +80,7 @@ id="expand" name="expand"/>
 		<%= render :partial => "questions/" + q.class.name.downcase, :locals=>{:question=>q} %> 
 		<%= link_to image_tag("edit_small.png", :border => 0), edit_question_path(q.becomes(Question))%>
 		<% if q.class.name == "MultipleChoiceRadio"%>
-			<%= link_to image_tag("sub_small.png", :border => 0), :action => "new", :id => q.id, :types => "FreeForm",:sub => "new" %>
+			<%= link_to image_tag("sub_small.png", :border => 0), :action => "new", :id => q.id, :type => "FreeForm",:sub => "new" %>
 		<% end %>
 		<%= link_to image_tag("delete_small.png", :border => 0), [@section,q.becomes(Question)],:confirm => 'Are you sure?', :method => :delete %>
 		<% subs = q.sub_questions %>
