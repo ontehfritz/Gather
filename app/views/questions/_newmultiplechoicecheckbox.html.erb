@@ -65,71 +65,42 @@ function showEditImage(id){
 
 </script>
 <%= hidden_field_tag "sort_order"%>
-<div class="field" style="float:left;">
+<div style="float:left;">
+<div class="field">
 	<%= f.label :question_text %>
 	<br />
-	<%= f.text_area :question_text, :size => "30x10" %>
-</div>
-<div class="field" style="float:left; margin-left:20px">
-	<%= f.label :instructions %>
-	<br />
-	<%= f.text_area :instructions, :size => "30x10" %>
-</div>
-<div class="field" style="float:left; margin-left:20px;">
-	<fieldset>
-		<legend>
-			Question Options
-		</legend>
-		<b>Include Textbox:</b>
-		<br />
-		<%= select("question", "option_id", Option.all.collect {|t| [ t.name, t.id ] }) %>
-		<br />
-		<% if @question.option_id == 3 %>
-		<div id="additional" style="display:block;">
-		<%else%>
-		<div id="additional" style="display:none;">
-		<%end%>
-			<%= f.label :additional_comments %>
-			<br />
-			<%= f.text_field :additional_comments %>
-			<br />
-		</div>
-		<%= f.label :is_answer_required %>
-		<%= f.check_box :is_answer_required %>
-		<br />
-		<br />
-		<%= f.label :short_name %>
-		<br />
-		<%= f.text_field :short_name %>
-		<br />
-	</fieldset>
+	<%= f.text_area :question_text, :size => "50x3" %>
 </div>
 <% if @question.id != nil %>
-<div class="field" style="float:left; margin-left:20px;">
-	<% if @question_image != nil %>
-		<a href="" onclick="return showEditImage(<%="#{@question_image.id}"%>)">Add/Edit Image</a>
-	<% else %>
-		<a href="" onclick="return showAddImage()">Add/Edit Image</a>
-	<% end %>
-	<div style="border: 1px solid black;text-align: center">
-		<% if @question_image != nil %>
-		<%= image_tag("/question_images/#{@question_image.id}", :alt => "Image", :size =>"100x100") %>
-		<br />
-		<%= link_to image_tag("delete.png", :border => 0),
-		@question_image,
-		:confirm => 'Are you sure?',
-		:method => :delete %>
-
-		<%end%>
-	</div>
+<div class="field">
+  <% if @question_image != nil %>
+    <a href="" onclick="return showEditImage(<%="#{@question_image.id}"%>)">Edit Image</a>
+     <%= link_to 'X',
+          @question_image,
+          :confirm => 'Are you sure?',
+          :method => :delete %>
+  <% else %>
+    <a href="" onclick="return showAddImage()">Add/Image</a>
+  <% end %>
+  <div>
+    <% if @question_image != nil %>
+    <%= image_tag("/question_images/#{@question_image.id}", :alt => "Image") %>
+    <br />
+    <%end%>
+  </div>
 </div>
 <%end%>
+<div class="field">
+	<%= f.label :instructions %>
+	<br />
+	<%= f.text_area :instructions, :size => "50x3" %>
+</div>
 <% if @question.id != nil %>
 <div id="canswers" style="clear:both">
 	<table id="sort" style="width:100%">
 		<thead>
 			<tr>
-				<th></th>
+				<th><a href="" onclick="return showNewDialog()">new</a></th>
 				<th>Answer</th>
 				<th>Score</th>
 				<th>Action</th>
@@ -140,15 +111,43 @@ function showEditImage(id){
 			:collection => @question.elements %>
 		</tbody>
 	</table>
-	<a href="" onclick="return showNewDialog()"><%= image_tag("new_answer.png", :border => 0)%></a>
-	<br />
 	<div id="divId" title="Add Answer">
 		<iframe id="modalIframeId" width="100%" height="100%"
 		marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
 		title="Dialog Title">
-			Your browser does not suppr
+			Your browser does not support
 		</iframe>
 	</div>
 </div>
 <hr />
 <% end %>
+</div>
+<div class="field" style="float:left; margin-left:20px;">
+  <fieldset style="background-color:#e6fdba;margin: 0;">
+    <legend>
+      Question Options
+    </legend>
+    <b>Include Textbox:</b>
+    <br />
+    <%= select("question", "option_id", Option.all.collect {|t| [ t.name, t.id ] }) %>
+    <br />
+    <% if @question.option_id == 3 %>
+    <div id="additional" style="display:block;">
+    <%else%>
+    <div id="additional" style="display:none;">
+    <%end%>
+      <%= f.label :additional_comments %>
+      <br />
+      <%= f.text_field :additional_comments %>
+      <br />
+    </div>
+    <%= f.label :is_answer_required %>
+    <%= f.check_box :is_answer_required %>
+    <br />
+    <br />
+    <%= f.label :short_name %>
+    <br />
+    <%= f.text_field :short_name %>
+    <br />
+  </fieldset>
+</div>

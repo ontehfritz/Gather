@@ -77,83 +77,41 @@ $(document).ready(function() {
 });
 </script>
 <%= hidden_field_tag "sort_order"%>
-<div class="field" style="float:left;">
-	<%= f.label :question_text %>
-	<br />
-    <%= f.text_area :question_text, :size => "30x10" %>
-</div>
-<div class="field" style="float:left; margin-left:20px">
-    <%= f.label :instructions %><br />
-    <%= f.text_area :instructions, :size => "30x10" %>
-</div>
-<div class="field" style="float:left; margin-left:20px;">
-	<fieldset>
-	<legend>Question Options</legend>
-	<b>Include Textbox:</b><br />
-	<%= select("question", "option_id", Option.all.collect {|t| [ t.name, t.id ] }) %><br />
-	<% if @question.option_id == 3 %>
-		<div id="additional" style="display:block;">
-	<%else%>
-		<div id="additional" style="display:none;">
-	<%end%>
-	<%= f.label :additional_comments %><br />
-	<%= f.text_field :additional_comments %><br />
-    </div>
-
-	<%= f.label :is_answer_required %>
-	<%= f.check_box :is_answer_required %><br /><br />
-
-    <%= f.label :short_name %><br />
-    <%= f.text_field :short_name %><br />
-	</fieldset>
+<div style="float:left;">
+<div class="field">
+  <%= f.label :question_text %>
+  <br />
+  <%= f.text_area :question_text, :size => "50x3" %>
 </div>
 <% if @question.id != nil %>
-<div class="field" style="float:left; margin-left:20px;">
+<div class="field">
 <% if @question_image != nil %>
-		<a href="" onclick="return showEditImage(<%="#{@question_image.id}"%>)">Add/Edit Image</a>
-<% else %>
-		<a href="" onclick="return showAddImage()">Add/Edit Image</a>
-<% end %>
-	<div style="border: 1px solid black;text-align: center">
-	<% if @question_image != nil %>
-		<%= image_tag("/question_images/#{@question_image.id}", :alt => "Image", :size =>"100x100") %>
-	    <br />
-		<%= link_to image_tag("delete.png", :border => 0),
-			   @question_image,
+    <a href="" onclick="return showEditImage(<%="#{@question_image.id}"%>)">Edit Image</a>
+    <%= link_to 'X',
+         @question_image,
                :confirm => 'Are you sure?',
                :method => :delete %>
-               
-	<%end%>
-	</div>
+<% else %>
+    <a href="" onclick="return showAddImage()">Add Image</a>
+<% end %>
+ 
+  <div>
+  <% if @question_image != nil %>
+    <%= image_tag("/question_images/#{@question_image.id}", :alt => "Image") %>
+  <%end%>
+  </div>
 </div>
 <%end%>
-
-<% if @question.id != nil %>
-<div style="clear:both; border: 1px solid black; background-color:#CEED91;">
-<table style="width:100%">
-	<tr>
-		<th>Skip Logic</th>
-		<th>Actions</th>
-	</tr>
-	<%if @question.skip_logics != nil %>
-		<%@question.skip_logics.each do |s| %>
-			<tr>
-				<td><%= s.types %> section <%= s.section.name %>  if answered <%= s.element.element_text %> </td>
-				<td><a href="" onclick="return showEditSkipDialog(<%=s.id%>)"><%= image_tag("edit.png", :border => 0) %></a> 
-					<%= link_to image_tag("delete.png", :border => 0), s, :confirm => 'Are you sure?', :method => :delete %></td>
-			</tr>
-		<%end%>
-	<% end %>
-</table>
-<hr />
-<input type="button" id="add" value="add" class="buttonSubmit" onclick="return showAddSkipDialog()"/>
+<div class="field">
+    <%= f.label :instructions %><br />
+    <%= f.text_area :instructions, :size => "50x3" %>
 </div>
-<br />
+<% if @question.id != nil %>
 <div id="canswers" style="clear:both">
 <table id="sort" style="width:100%">
 <thead>
 <tr>
-	<th></th>
+	<th><a href="" onclick="return showNewDialog()">New</a></th>
 	<th>Answer</th>
 	<th>Score</th>
 	<th>Action</th>
@@ -164,13 +122,53 @@ $(document).ready(function() {
            :collection => @question.elements %>
 </tbody>
 </table>
-<a href="" onclick="return showNewDialog()"><%= image_tag("new_answer.png", :border => 0)%></a>
+
 <br />
+</div>
+<hr />
 <div id="divId">
     <iframe id="modalIframeId" width="100%" height="100%"
     marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
     title="Dialog Title">Your browser does not support javascript</iframe>
 </div>
-</div>
-<hr />
 <% end %>
+</div>
+<div class="field" style="float:left;height:100%;margin-left: 20px;">
+  <fieldset style="background-color:#e6fdba;margin: 0;">
+  <legend>Options</legend>
+  <b>Include Textbox:</b><br />
+  <%= select("question", "option_id", Option.all.collect {|t| [ t.name, t.id ] }) %><br />
+  <% if @question.option_id == 3 %>
+    <div id="additional" style="display:block;">
+  <%else%>
+    <div id="additional" style="display:none;">
+  <%end%>
+  <%= f.label :additional_comments %><br />
+  <%= f.text_field :additional_comments %><br />
+    </div>
+
+  <%= f.label :is_answer_required %>
+  <%= f.check_box :is_answer_required %><br /><br />
+
+  <%= f.label :short_name %><br />
+  <%= f.text_field :short_name %><br />
+  <br />
+  <table style="width:100%">
+  <tr>
+    <th>Skip Logic</th>
+    <th>Actions</th>
+  </tr>
+  <%if @question.skip_logics != nil %>
+    <%@question.skip_logics.each do |s| %>
+      <tr>
+        <td><%= s.types %> section <%= s.section.name %>  if answered <%= s.element.element_text %> </td>
+        <td><a href="" onclick="return showEditSkipDialog(<%=s.id%>)">edit</a> 
+          <%= link_to 'X', s, :confirm => 'This will delete this item?', :method => :delete %></td>
+      </tr>
+    <%end%>
+  <% end %>
+ </table>
+<hr />
+<input type="button" id="add" value="add" class="buttonSubmit" onclick="return showAddSkipDialog()"/>
+  </fieldset>
+</div>

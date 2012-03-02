@@ -6,10 +6,10 @@
   <%elsif element.question.class.name != "Scale"%>
   <td><%= element.score %></td>
   <%end%> 
-  <td><a href="" onclick="return showEditDialog(<%= element.id %>)"><%= image_tag("edit.png", :border => 0) %></a>
-  <%= link_to image_tag("delete.png", :border => 0),
+  <td><a href="" onclick="return showEditDialog(<%= element.id %>)">edit</a>
+  <%= link_to 'X',
 			   [element.question.becomes(Question),element],
-               :confirm => 'Are you sure?',
+               :confirm => 'This will delete the Answer',
                :method => :delete %>
   </td>
 </tr>

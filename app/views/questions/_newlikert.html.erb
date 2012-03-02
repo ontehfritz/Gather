@@ -45,39 +45,30 @@ $(document).ready(function() {
 });
 </script>
 <%= hidden_field_tag "sort_order"%>
-<div class="field" style="float:left;">
+<div style="float:left;">
+<div class="field">
 	Description<br />
-    <%= f.text_area :question_text, :size => "30x10" %>
+  <%= f.text_area :question_text, :size => "50x4" %>
 </div>
-<div class="field" style="float:left; margin-left:20px">
+<div class="field">
     <%= f.label :instructions %><br />
-    <%= f.text_area :instructions, :size => "30x10" %>
+    <%= f.text_area :instructions, :size => "50x4" %>
 </div>
-<div class="field" style="float:left; margin-left:20px;">
-	<fieldset>
-	<legend>Question Options</legend>
-	<%= f.label :is_answer_required %>
-	<%= f.check_box :is_answer_required %><br /><br />
-
-    <%= f.label :short_name %><br />
-    <%= f.text_field :short_name %><br />
-	</fieldset>
-</div>
-<div class="field" style="clear:both">
+<div class="field">
   <% if @question.matrix_columns == nil %>
   Columns (comma seperated):<br />
-  <%= f.text_area :matrix_columns,:cols => "100",:rows => "2",
+  <%= f.text_area :matrix_columns,:cols => "50",:rows => "2",
 					:value => "Strongly disagree,Disagree,Neither agree nor disagree,Agree,Strongly agree" %>
   <%else%>
-  <%= f.text_area :matrix_columns,:cols => "100",:rows => "2" %>
+  <%= f.text_area :matrix_columns,:cols => "50",:rows => "2" %>
   <%end%>
 </div>
 <% if @question.id != nil %>
 <div id="canswers" style="clear:both">
-<table id="sort" style="width:550px">
+<table id="sort" style="width:100%;">
 <thead>
 <tr>
-	<th></th>
+	<th><a href="" onclick="return showNewDialog()">new</a></th>
 	<th>Questions</th>
 	<th>Score</th>
 	<th>Action</th>
@@ -88,13 +79,23 @@ $(document).ready(function() {
            :collection => @question.elements,:locals=>{:f=>f} %>
 </tbody>
 </table>
-<a href="" onclick="return showNewDialog()"><%= image_tag("new_answer.png", :border => 0)%></a>
 <br />
 <div id="divId" title="Add Question">
     <iframe id="modalIframeId" width="100%" height="100%"
     marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
-    title="Dialog Title">Your browser does not suppr</iframe>
+    title="Dialog Title">Your browser does not support</iframe>
 </div>
 </div>
 <hr />
 <% end %>
+</div>
+<div style="float:left; margin-left:20px;">
+  <fieldset style="background-color:#e6fdba;margin: 0;">
+  <legend>Options</legend>
+  <%= f.label :is_answer_required %>
+  <%= f.check_box :is_answer_required %><br /><br />
+
+    <%= f.label :short_name %><br />
+    <%= f.text_field :short_name %><br />
+  </fieldset>
+</div>

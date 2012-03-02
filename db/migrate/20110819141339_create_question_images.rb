@@ -4,7 +4,7 @@ class CreateQuestionImages < ActiveRecord::Migration
       t.references :question
       t.string :content_type
       t.string :file_name
-      t.binary :image_data
+      t.binary :image_data, :limit => 10.megabyte
       t.timestamps
     end
   end

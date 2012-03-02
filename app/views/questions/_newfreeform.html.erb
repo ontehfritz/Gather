@@ -24,41 +24,42 @@ $(document).ready(function() {
     });
 });
 </script>
-<div class="field" style="float:left;">
-	<%= f.label :question_text %><br />
-    <%= f.text_area :question_text, :size => "30x10" %>
+<div style="float:left;">
+<div class="field">
+  <%= f.label :question_text %><br />
+  <%= f.text_area :question_text, :size => "50x3" %>
 </div>
-<div class="field" style="float:left; margin-left:20px">
+<% if @question.id != nil %>
+<div class="field">
+<% if @question_image != nil %>
+    <a href="" onclick="return showEditImage(<%="#{@question_image.id}"%>)">Edit Image</a>
+    <%= link_to "X",
+         @question_image,
+               :confirm => 'Are you sure?',
+               :method => :delete, :title => 'Delete Image' %>
+<% else %>
+    <a href="" onclick="return showAddImage()">Add Image</a>
+<% end %>
+</div>
+<%end%>
+<div>
+<% if @question_image != nil %>
+  <%= image_tag("/question_images/#{@question_image.id}", :alt => "Image") %>
+<%end%>
+</div>
+<div class="field">
     <%= f.label :instructions %><br />
-    <%= f.text_area :instructions, :size => "30x10" %>
+    <%= f.text_area :instructions, :size => "50x3" %>
 </div>
-<div class="field" style="float:left; margin-left:20px;">
-	<fieldset>
-	<legend>Question Options</legend>
+</div>
+<div class="field" style="float:left;margin-left: 20px;">
+	<fieldset style="background-color:#e6fdba;margin: 0;">
+	<legend>Options</legend>
     <%= f.label :short_name %><br />
     <%= f.text_field :short_name %>
 	</fieldset>
 </div>
-<% if @question.id != nil %>
-<div class="field" style="float:left; margin-left:20px;">
-<% if @question_image != nil %>
-		<a href="" onclick="return showEditImage(<%="#{@question_image.id}"%>)">Add/Edit Image</a>
-<% else %>
-		<a href="" onclick="return showAddImage()">Add/Edit Image</a>
-<% end %>
-	<div style="border: 1px solid black;text-align: center">
-	<% if @question_image != nil %>
-		<%= image_tag("/question_images/#{@question_image.id}", :alt => "Image", :size =>"100x100") %>
-	    <br />
-		<%= link_to image_tag("delete.png", :border => 0),
-			   @question_image,
-               :confirm => 'Are you sure?',
-               :method => :delete %>
-               
-	<%end%>
-	</div>
-</div>
-<%end%>
+
 <div id="divId" title="Add Image">
     <iframe id="modalIframeId" width="100%" height="100%"
     marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto"
