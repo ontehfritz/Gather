@@ -51,7 +51,7 @@ check sum: <%= session[:checksum] %><
 			<% sub_questions.each do |s|%>
 				<li>
 				<div id="branch_<%= s.id %>" <%if s.is_hidden == true%> style="display:none" <% end %> class="branch" >
-					<%= render :partial => "questions/" + s.types.downcase, :locals=>{:question=>s} %> 
+					<%= render :partial => "questions/" + s.type.downcase, :locals=>{:question=>s} %> 
 				</div>
 				</li>
 			<% end %>
