@@ -13,7 +13,7 @@ Gather is using rails v3.1.0 and has been tested with
 mysql and ruby 1.9.2 
 
 Check out the wiki for more information @: 
-https://github.com/ontehfritz/Gather/wiki
+https://github.com/fritzcoder/Gather/wiki
 
 Demo and test site:
 http://www.gathersurvey.tk/
@@ -22,4 +22,4 @@ pass: password123
 
 
 Report bugs and feature requests @:
-https://github.com/ontehfritz/Gather/
+https://github.com/fritzcoder/Gather/
