@@ -15,8 +15,7 @@ mysql and ruby 1.9.2
 Check out the wiki for more information @: 
 https://github.com/fritzcoder/Gather/wiki
 
-Demo and test site:
-http://www.gathersurvey.tk/
+Default admin:
 user: admin@gather.here
 pass: password123
 
